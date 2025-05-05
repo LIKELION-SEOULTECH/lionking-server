@@ -21,7 +21,7 @@ public enum GlobalErrorCode implements ErrorCode {
     /**
      * 400 : 요청 실패
      */
-    VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "REQUEST_001", "잘못된 요청입니다."),
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, "REQUEST_001", "잘못된 요청입니다."),
     INVALID_ENUM(HttpStatus.BAD_REQUEST, "REQUEST_002", "Enum 타입으로 변경할 수 없습니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "REQUEST_003", "자격 증명이 이루어지지 않았습니다."),
     INVALID_PERMISSION(HttpStatus.FORBIDDEN, "REQUEST_004", "접근 권한이 없습니다."),
