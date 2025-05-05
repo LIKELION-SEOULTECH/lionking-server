@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.fail(GlobalErrorCode.VALIDATION_ERROR, errorMessage));
+                .body(ApiResponse.fail(GlobalErrorCode.VALIDATION_ERROR));
     }
 
     @ExceptionHandler(Exception.class)
