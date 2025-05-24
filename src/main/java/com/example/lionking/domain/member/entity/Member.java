@@ -1,5 +1,6 @@
 package com.example.lionking.domain.member.entity;
 
+import com.example.lionking.domain.Project.entity.Project;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -23,10 +24,17 @@ public class Member {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
+    @ManyToOne
+    private Project project;
+
+    @Column(length = 300)
+    private String ProjectReviews;
+
     @Builder
-    public Member(String username, Position position, Role role) {
+    public Member(String username, Position position, Role role, String ProjectReviews) {
         this.username = username;
         this.position = position;
         this.role = role;
+        this.ProjectReviews = ProjectReviews;
     }
 }
