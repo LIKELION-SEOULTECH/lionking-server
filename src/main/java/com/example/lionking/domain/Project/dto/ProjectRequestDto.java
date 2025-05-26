@@ -1,13 +1,23 @@
 package com.example.lionking.domain.Project.dto;
 
-import lombok.Getter;
+import jakarta.validation.constraints.NotNull;
 
-@Getter
-public class ProjectRequestDto {
-    private String title;
-    private String projectType;
-    private String projectDescription;
-    private String videoLink;
-    private Long memberId;
-    //private String
-}
+import java.util.List;
+
+public record ProjectRequestDto(
+    @NotNull
+    String title,
+    @NotNull
+    String projectType,
+    @NotNull
+    String projectDescription,
+    String videoLink,
+    @NotNull
+    List<Long> memberIds,
+    @NotNull
+    String thumbnailImageKey,
+    @NotNull
+    List<String> landingImagesKeys,
+    @NotNull
+    String review
+) {}
