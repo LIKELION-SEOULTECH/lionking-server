@@ -14,12 +14,11 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(nullable = false)
     private String username;
 
     @Enumerated(value = EnumType.STRING)
     private Position position;
-
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
