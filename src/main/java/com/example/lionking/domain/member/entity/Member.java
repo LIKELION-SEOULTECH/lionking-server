@@ -1,7 +1,7 @@
 package com.example.lionking.domain.member.entity;
 
 import com.example.lionking.domain.Project.entity.Project;
-import com.example.lionking.domain.Project.entity.ProjectReview;
+import com.example.lionking.domain.Project.entity.ProjectParticipation;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -33,7 +33,7 @@ public class Member {
     private Project project;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProjectReview> reviews = new ArrayList<>();
+    private List<ProjectParticipation> reviews = new ArrayList<>();
 
     @Builder
     public Member(String username, Position position, Role role) {

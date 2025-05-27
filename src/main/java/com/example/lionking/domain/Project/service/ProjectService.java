@@ -1,6 +1,9 @@
 package com.example.lionking.domain.Project.service;
 
+import com.example.lionking.domain.Project.dto.ProjectDetailResponseDto;
 import com.example.lionking.domain.Project.dto.ProjectRequestDto;
+import com.example.lionking.domain.Project.dto.ProjectResponseDto;
+import com.example.lionking.domain.Project.dto.ProjectUpdateRequestDto;
 import com.example.lionking.domain.Project.entity.*;
 import com.example.lionking.domain.Project.repository.ProjectRepository;
 import com.example.lionking.domain.Project.repository.ProjectReviewRepository;
@@ -9,6 +12,7 @@ import com.example.lionking.domain.member.repository.MemberRepository;
 import com.example.lionking.global.error.GlobalErrorCode;
 import com.example.lionking.global.error.exception.CustomException;
 import com.example.lionking.global.s3.service.S3Service;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,21 +26,18 @@ import java.util.List;
 public class ProjectService {
     private final ProjectRepository projectRepository;
     private final MemberRepository memberRepository;
-    private final S3Service s3Service;
     private final ProjectReviewRepository projectReviewRepository;
 
     @Transactional
-    public void postProject(ProjectRequestDto projectRequestDto, Long memberId) {
+    public void postProject(ProjectRequestDto req) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(GlobalErrorCode.NOT_FOUND));
-       /*아래처럼 하면 안되는 이유는 결국엔 해당 프로젝트의 멤버가 작성한 리뷰가 저장되어야 하는데 멤버가 작성한 마지막 리뷰가 저장되므로
-         member.updateReview(projectRequestDto.review());*/
-        // 프로젝트 타입을 받으면 string 이니까 이걸 서비스 코드에서 어떤 프로젝트 타입의 enum인지 먼저 확인해주고 넣어주기
-        ProjectType projectType = ProjectType.transProjectType(projectRequestDto.projectType());
-        String thumbnailImageKey = projectRequestDto.thumbnailImageKey();
-        List<String> landingImagesKeys = projectRequestDto.landingImagesKeys();
 
-        Project project = Project.create(projectRequestDto, projectType);
+        ProjectType projectType = ProjectType.transProjectType(req.projectType());
+        String thumbnailImageKey = req.thumbnailImageKey();
+        List<String> landingImagesKeys = req.landingImagesKeys();
+
+        Project project = Project.create(req, projectType);
 
         // 연관관계 설정
         project.addProjectImage(ProjectImage.of(thumbnailImageKey, ImageType.THUMBNAIL));
@@ -47,28 +48,29 @@ public class ProjectService {
 
         projectRepository.save(project);
 
-        ProjectReview projectReview = ProjectReview.of(project, member, projectRequestDto.review());
-        project.getReviews().add(projectReview);
-        member.getReviews().add(projectReview);
+        ProjectParticipation projectParticipation = ProjectParticipation.of(project, member, req.review());
+        project.getReviews().add(projectParticipation);
+        member.getReviews().add(projectParticipation);
 
-        projectReviewRepository.save(projectReview);
+        projectReviewRepository.save(projectParticipation);
+       /*아래처럼 하면 안되는 이유는 결국엔 해당 프로젝트의 멤버가 작성한 리뷰가 저장되어야 하는데 멤버가 작성한 마지막 리뷰가 저장되므로
+         member.updateReview(req.review());*/
+    }
 
-        /*
-        if (thumbnailImageKey != null) {
-            ProjectImage thumbnail = ProjectImage.create(thumbnailImageKey, ImageType.THUMBNAIL);
-            project.addProjectImage(thumbnail);
-        }*/
+    public List<ProjectResponseDto> getAllProjects(ProjectType projectType, Integer generation, Integer page, Integer size) {
+        return null;
+    }
 
-        /*
-        if (landingImagesKeys != null) {
-            for (String landingKey : landingImagesKeys) {
-                ProjectImage landingImage = ProjectImage.create(landingKey, ImageType.LANDING);
-                project.addProjectImage(landingImage);
-            }
-        }*/
 
-        // 프로젝트 썸네일은 ProjectImage의
-        // s3Service.getPresignedUrlForPut() // 이거는 저장하는 api 따로 파서 거기서 실행하고
-        // 반환 받은 이미지 s3key만 받아서 저장해주기
+    public ProjectDetailResponseDto getProject(Long projectId) {
+        return null;
+    }
+
+    public void updateProject(Long projectId, @Valid ProjectUpdateRequestDto req) {
+        return;
+    }
+
+    public void deleteProject(Long projectId) {
+        return;
     }
 }

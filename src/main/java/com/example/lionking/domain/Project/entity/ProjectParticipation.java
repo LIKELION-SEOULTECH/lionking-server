@@ -9,10 +9,13 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class ProjectReview {
+public class ProjectParticipation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(length = 300)
+    private String review;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
@@ -22,15 +25,13 @@ public class ProjectReview {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private String review;
-
-    private ProjectReview(Project project, Member member, String review) {
+    private ProjectParticipation(Project project, Member member, String review) {
         this.project = project;
         this.member = member;
         this.review = review;
     }
 
-    public static ProjectReview of(Project project, Member member, String review) {
-        return new ProjectReview(project,member,review);
+    public static ProjectParticipation of(Project project, Member member, String review) {
+        return new ProjectParticipation(project,member,review);
     }
 }

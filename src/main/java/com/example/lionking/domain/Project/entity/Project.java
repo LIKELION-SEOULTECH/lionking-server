@@ -29,7 +29,8 @@ public class Project {
     @OneToMany(mappedBy = "project",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Member> members = new ArrayList<>();
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProjectReview> reviews = new ArrayList<>();
+    private List<ProjectParticipation> reviews = new ArrayList<>();
+
 
     public static Project create(ProjectRequestDto projectRequestDto, ProjectType projectType) {
         return Project.builder()
