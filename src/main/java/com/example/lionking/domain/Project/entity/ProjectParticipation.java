@@ -34,4 +34,8 @@ public class ProjectParticipation {
     public static ProjectParticipation of(Project project, Member member, String review) {
         return new ProjectParticipation(project,member,review);
     }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
 }

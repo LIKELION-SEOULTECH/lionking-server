@@ -32,17 +32,10 @@ public class Member {
     @JoinColumn(name="project_id") // 기본적으로 nullable은 true 모든 멤버가 프로젝트를 가질 필요는 없음
     private Project project;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProjectParticipation> reviews = new ArrayList<>();
-
     @Builder
     public Member(String username, Position position, Role role) {
         this.username = username;
         this.position = position;
         this.role = role;
-    }
-
-    public void set(Project project) {
-        this.project = project;
     }
 }

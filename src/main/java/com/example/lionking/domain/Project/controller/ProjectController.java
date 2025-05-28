@@ -45,6 +45,7 @@ public class ProjectController {
         return ApiResponse.success(Projects);
     }
 
+    @Operation(summary = "단일 프로젝트 조회", description = "단일 프로젝트 조회 API")
     @GetMapping("/{projectId}")
     public ApiResponse<ProjectDetailResponseDto> getProject(@PathVariable Long projectId)
     {
@@ -52,6 +53,7 @@ public class ProjectController {
         return ApiResponse.success(project);
     }
 
+    @Operation(summary = "단일 프로젝트 수정", description = "단일 프로젝트 수정 API")
     @PatchMapping("/{projectId}")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -63,6 +65,7 @@ public class ProjectController {
         return ApiResponse.success("프로젝트 수정 성공");
     }
 
+    @Operation(summary = "단일 프로젝트 삭제", description = "단일 프로젝트 삭제 API")
     @DeleteMapping("/{projectId}")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)

@@ -2,6 +2,7 @@ package com.example.lionking.domain.Project.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,13 +19,17 @@ public class ProjectImage {
     @JoinColumn(name = "project_id")
     private Project project;
 
-    private ProjectImage(String imageKey, ImageType imageType) {
+    @Builder
+    public ProjectImage(String s3Key, ImageType imageType) {
+        this.s3Key = s3Key;
         this.imageType = imageType;
-        this.s3Key = imageKey;
     }
 
-    public static ProjectImage of(String imageKey, ImageType imageType) {
-        return new ProjectImage(imageKey, imageType);
+    public static ProjectImage of(String s3Key, ImageType imageType) {
+        return ProjectImage.builder()
+                .s3Key(s3Key)
+                .imageType(imageType)
+                .build();
     }
 
     public void setProject(Project project) {
