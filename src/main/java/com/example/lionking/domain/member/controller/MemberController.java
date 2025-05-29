@@ -40,6 +40,9 @@ public class MemberController {
         return ApiResponse.success(MemberResponse.from(member), "단일 MEMBER 조회 성공");
     }
 
+    /**
+     * [Update]
+     */
     @PutMapping("/{memberId}")
     @Operation(summary = "멤버 프로필 수정")
     public ApiResponse<MemberResponse> updateMemberProfile(
