@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/blog")
-@Tag(name = "블로그 API", description = "블로그 API : 세션 및 아티클")
+@Tag(name = "Blog API", description = "Session & Article")
 public class BlogController {
 
     private final BlogService blogService;
