@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    #url: jdbc:mysql://lionking-db:3307/lion_db   #이건 docker 컨테이너 안에서 실행되는 경우
+    url: jdbc:mysql://localhost:3306/mydb
+    username: root
+    password: rkwhr123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+cloud:
+  aws:
+    credentials:
+      access-key: <YOUR_ACCESS_KEY>
+      secret-key: <YOUR_SECRET_KEY>
+    region: ap-northeast-2  # 예시: 서울 리전
+  s3:
+    bucket: <YOUR_BUCKET_NAME>
+    expTime: 600000  # presigned url 만료(ms)
