@@ -1,4 +1,4 @@
-package com.example.lionking.domain.Project.entity;
+package com.example.lionking.domain.project.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

@@ -1,13 +1,10 @@
-package com.example.lionking.domain.Project.entity;
+package com.example.lionking.domain.project.entity;
 
-import com.example.lionking.domain.Project.dto.ProjectRequestDto;
-import com.example.lionking.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,11 +1,9 @@
-package com.example.lionking.domain.Project.controller;
+package com.example.lionking.domain.project.controller;
 
-import com.example.lionking.domain.Project.dto.ProjectDetailResponseDto;
-import com.example.lionking.domain.Project.dto.ProjectRequestDto;
-import com.example.lionking.domain.Project.dto.ProjectResponseDto;
-import com.example.lionking.domain.Project.dto.ProjectUpdateRequestDto;
-import com.example.lionking.domain.Project.entity.ProjectType;
-import com.example.lionking.domain.Project.service.ProjectService;
+import com.example.lionking.domain.project.dto.ProjectDetailResponseDto;
+import com.example.lionking.domain.project.dto.ProjectRequestDto;
+import com.example.lionking.domain.project.dto.ProjectUpdateRequestDto;
+import com.example.lionking.domain.project.service.ProjectService;
 import com.example.lionking.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -13,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,7 +28,7 @@ public class ProjectController {
         return ApiResponse.success("프로젝트 등록 성공");
     }
 
-    @Operation(summary = "모든 프로젝트 조회", description = "모든 프로젝트 조회 API")
+/*    @Operation(summary = "모든 프로젝트 조회", description = "모든 프로젝트 조회 API")
     @GetMapping
     public ApiResponse<List<ProjectResponseDto>> getAllProjects(
             @RequestParam(required = false) ProjectType projectType,
@@ -43,7 +39,7 @@ public class ProjectController {
     {
         List<ProjectResponseDto> Projects = projectService.getAllProjects(projectType, generation, page, size);
         return ApiResponse.success(Projects);
-    }
+    }*/
 
     @Operation(summary = "단일 프로젝트 조회", description = "단일 프로젝트 조회 API")
     @GetMapping("/{projectId}")

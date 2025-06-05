@@ -1,4 +1,4 @@
-package com.example.lionking.domain.Project.dto;
+package com.example.lionking.domain.project.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,4 +1,4 @@
-package com.example.lionking.domain.Project.entity;
+package com.example.lionking.domain.project.entity;
 
 import com.example.lionking.domain.member.entity.Member;
 import jakarta.persistence.*;

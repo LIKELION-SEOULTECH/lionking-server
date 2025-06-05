@@ -1,10 +1,10 @@
-package com.example.lionking.domain.Project.service;
+package com.example.lionking.domain.project.service;
 
-import com.example.lionking.domain.Project.dto.*;
-import com.example.lionking.domain.Project.entity.*;
-import com.example.lionking.domain.Project.repository.ProjectImageRepository;
-import com.example.lionking.domain.Project.repository.ProjectRepository;
-import com.example.lionking.domain.Project.repository.ProjectReviewRepository;
+import com.example.lionking.domain.project.dto.*;
+import com.example.lionking.domain.project.entity.*;
+import com.example.lionking.domain.project.repository.ProjectImageRepository;
+import com.example.lionking.domain.project.repository.ProjectRepository;
+import com.example.lionking.domain.project.repository.ProjectReviewRepository;
 import com.example.lionking.domain.member.entity.Member;
 import com.example.lionking.domain.member.repository.MemberRepository;
 import com.example.lionking.global.error.GlobalErrorCode;
@@ -14,7 +14,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,10 +63,10 @@ public class ProjectService {
                 .build();
     }
 
-    public List<ProjectResponseDto> getAllProjects(ProjectType projectType, Integer generation, Integer page, Integer size) {
-        return null;
-    }
-
+/*    public List<ProjectResponseDto> getAllProjects(ProjectType projectType, Integer generation, Integer page, Integer size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        projectRepository.findProjects(projectType,generation,pageRequest);
+    }*/
 
     public ProjectDetailResponseDto getProject(Long projectId) {
         return null;

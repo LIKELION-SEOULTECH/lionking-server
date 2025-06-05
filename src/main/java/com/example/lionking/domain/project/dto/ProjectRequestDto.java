@@ -1,6 +1,6 @@
-package com.example.lionking.domain.Project.dto;
+package com.example.lionking.domain.project.dto;
 
-import com.example.lionking.domain.Project.entity.ProjectType;
+import com.example.lionking.domain.project.entity.ProjectType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
