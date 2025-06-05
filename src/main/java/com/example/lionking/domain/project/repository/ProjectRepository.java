@@ -9,9 +9,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
-    @Query("select p from Project p left join fetch " )
+/*    @Query("select p from Project p left join fetch " )
     List<Project> findAllByGenerationAndProjectType(
             @Param("generation") String generation,
             @Param("projectType") ProjectType projectType
-    );
+    );*/
 }
