@@ -40,7 +40,7 @@ public class UserService {
     public List<UserResponse> getAllUsers() {
         List<User> users = userRepository.findAll();
         return users.stream()
-                .map(user -> UserResponse.from(user.getMember())) // 혹은 User 자체가 필요하면 바로 map(user -> UserResponse.from(user))
+                .map(user -> UserResponse.from(user.getMember()))
                 .toList();
     }
 

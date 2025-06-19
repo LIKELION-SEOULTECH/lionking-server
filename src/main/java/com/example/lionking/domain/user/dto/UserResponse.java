@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public record UserResponse(
         @Schema(description = "User ID", example = "1")
         Long userId,
+        @Schema(description = "Member ID", example = "1")
+        Long memberId,
         @Schema(description = "로그인 아이디", example = "lionking123")
         String loginId,
         @Schema(description = "사용자 이름", example = "김멋사")
@@ -20,6 +22,7 @@ public record UserResponse(
 ) {
     public static UserResponse from(Member member) {
         return new UserResponse(
+                member.getUser().getId(),
                 member.getId(),
                 member.getUser().getLoginId(),
                 member.getUsername(),

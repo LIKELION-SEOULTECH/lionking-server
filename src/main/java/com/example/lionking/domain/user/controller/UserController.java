@@ -1,6 +1,5 @@
 package com.example.lionking.domain.user.controller;
 
-import com.example.lionking.domain.user.entity.User;
 import com.example.lionking.domain.user.service.UserService;
 import com.example.lionking.domain.user.dto.UserRequest;
 import com.example.lionking.domain.user.dto.UserResponse;
@@ -17,7 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/user")
-@Tag(name = "User API", description = "User 로그인")
+@Tag(name = "User API", description = "회원가입 및 회원 조회")
 public class UserController {
 
     private final UserService userService;
