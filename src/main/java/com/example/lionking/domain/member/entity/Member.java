@@ -26,7 +26,7 @@ public class Member {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
-    // TODO : 기수(Generation) 필드 추가
+    private int generation;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -46,6 +46,7 @@ public class Member {
         this.username = username;
         this.position = position;
         this.role = role;
+        this.generation = 13; // 멋사 13기
         this.user = user;
         this.department = department;
         this.descriptionTag = descriptionTag;
