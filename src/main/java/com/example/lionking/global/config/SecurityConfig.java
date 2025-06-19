@@ -1,5 +1,10 @@
 package com.example.lionking.global.config;
 
+import com.example.lionking.domain.auth.security.CustomAuthenticationFilter;
+import com.example.lionking.domain.auth.security.JwtAccessDeniedHandler;
+import com.example.lionking.domain.auth.security.JwtAuthenticationEntryPoint;
+import com.example.lionking.domain.auth.security.JwtProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,13 +13,23 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final JwtProvider jwtProvider;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        CustomAuthenticationFilter customFilter = new CustomAuthenticationFilter(jwtProvider);
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -23,6 +38,14 @@ public class SecurityConfig {
 
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+                .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
+
+                .exceptionHandling((exceptions) ->
+                        exceptions
+                                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                                .accessDeniedHandler(jwtAccessDeniedHandler)
                 )
 
                 .authorizeHttpRequests((auth) -> auth
@@ -37,6 +60,20 @@ public class SecurityConfig {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:3000")
+                        .allowedMethods("*")
+                        .allowCredentials(true)
+                        .exposedHeaders("Authorization", "X-Refresh-Token");
+            }
+        };
     }
 
 }
