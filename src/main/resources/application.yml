@@ -1,7 +1,7 @@
 spring:
   datasource:
-    #url: jdbc:mysql://lionking-db:3307/lion_db   #이건 docker 컨테이너 안에서 실행되는 경우
-    url: jdbc:mysql://localhost:3306/mydb
+    #url: jdbc:mysql://lionking-db:3306/lion_db   #이건 docker 컨테이너 안에서 실행되는 경우
+    url: jdbc:mysql://localhost:3306/lionking-db
     username: root
     password: rkwhr123
     driver-class-name: com.mysql.cj.jdbc.Driver
