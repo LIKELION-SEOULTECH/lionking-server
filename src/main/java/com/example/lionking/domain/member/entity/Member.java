@@ -68,9 +68,15 @@ public class Member {
         this.position = Position.valueOf(position.toUpperCase());
     }
 
-    /** [관리자] : 멤버 권한 수정 */
+    /** [관리자] : 멤버 정보 수정 */
     public void updateRole(Role role) {
         this.role = role;
+    }
+    public void updatePosition(Position position) {
+        this.position = position;
+    }
+    public void updateGeneration(int generation) {
+        this.generation = generation;
     }
 }
 
