@@ -55,6 +55,7 @@ public class Member {
         this.portfolioUrls = portfolioUrls;
     }
 
+    /** 프로필 정보 추가 및 수정 */
     public void updateProfile(String username, String department, String descriptionTag,
                               String description, String techStack, String portfolioUrls,
                               String position) {
@@ -66,4 +67,10 @@ public class Member {
         this.portfolioUrls = portfolioUrls;
         this.position = Position.valueOf(position.toUpperCase());
     }
+
+    /** [관리자] : 멤버 권한 수정 */
+    public void updateRole(Role role) {
+        this.role = role;
+    }
 }
+
