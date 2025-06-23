@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BlogImage {
+public class BlogMedia {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,16 +17,16 @@ public class BlogImage {
     private String s3Key;
 
     @Enumerated(EnumType.STRING)
-    private BlogImageType imageType;
+    private BlogMediaType mediaType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "blog_id")
     private Blog blog;
 
     @Builder
-    public BlogImage(String s3Key, BlogImageType imageType, Blog blog) {
+    public BlogMedia(String s3Key, BlogMediaType mediaType, Blog blog) {
         this.s3Key = s3Key;
-        this.imageType = imageType;
+        this.mediaType = mediaType;
         this.blog = blog;
     }
 
@@ -35,8 +35,8 @@ public class BlogImage {
      */
     public void setBlog(Blog blog) {
         this.blog = blog;
-        if (!blog.getBlogImages().contains(this)) {
-            blog.getBlogImages().add(this);
+        if (!blog.getBlogMedia().contains(this)) {
+            blog.getBlogMedia().add(this);
         }
     }
     public void removeBlog() {
