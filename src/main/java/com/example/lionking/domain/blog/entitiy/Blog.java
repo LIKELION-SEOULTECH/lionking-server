@@ -1,5 +1,6 @@
 package com.example.lionking.domain.blog.entitiy;
 
+import com.example.lionking.domain.media.entity.Media;
 import com.example.lionking.domain.member.entity.Member;
 import com.example.lionking.global.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -22,9 +23,6 @@ public class Blog extends BaseTimeEntity {
     private BlogType blogType;
 
     private String thumbnailImage;
-
-    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BlogMedia> blogMedia = new ArrayList<>();
 
     @Column(nullable = false)
     private String title;
@@ -50,20 +48,4 @@ public class Blog extends BaseTimeEntity {
         this.content = content;
     }
 
-    /**
-     * Convenience Method
-     */
-    public void addBlogImage(BlogMedia blogMedia) {
-        if (blogMedia != null) {
-            this.blogMedia.add(blogMedia);
-            blogMedia.setBlog(this);
-        }
-    }
-    public void removeBlogImage(BlogMedia blogMedia) {
-        if (blogMedia == null) return;
-
-        if (this.blogMedia.remove(blogMedia)) {
-            blogMedia.removeBlog();
-        }
-    }
 }

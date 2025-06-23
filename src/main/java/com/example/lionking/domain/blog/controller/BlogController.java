@@ -5,6 +5,7 @@ import com.example.lionking.domain.blog.dto.BlogResponse;
 import com.example.lionking.domain.blog.service.BlogService;
 import com.example.lionking.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,8 +28,9 @@ public class BlogController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "블로그 작성", description = "새로운 블로그 게시글 작성")
     public ApiResponse<BlogResponse> postBlog(
-            @RequestBody BlogRequest request,
-            @PathVariable Long authorId
+            @Parameter(description = "작성자 ID", example = "1")
+            @PathVariable Long authorId,
+            @RequestBody BlogRequest request
     ) {
         BlogResponse response = blogService.postBlog(request, authorId);
         return ApiResponse.success(response, "새로운 블로그 작성 성공");
@@ -37,6 +39,13 @@ public class BlogController {
     /**
      * [READ]
      */
+    @GetMapping
+    @Operation(summary = "전체 블로그 목록 조회", description = "모든 블로그 게시글을 조회")
+    public ApiResponse<List<BlogResponse>> getAllBlogs() {
+        List<BlogResponse> responses = blogService.getAllBlogs();
+        return ApiResponse.success(responses, "전체 블로그 목록 조회 성공");
+    }
+
     @GetMapping("/{blogId}")
     @Operation(summary = "블로그 조회", description = "특정 블로그 ID 기반 게시글 조회")
     public ApiResponse<BlogResponse> getByBlogID(@PathVariable Long blogId) {
