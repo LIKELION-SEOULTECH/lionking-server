@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum BlogImageType {
-    THUMBNAIL("썸네일"),
-    CONTENT("본문")
+public enum BlogMediaType {
+    IMAGE("이미지"),
+    VIDEO("비디오")
     ;
 
     private final String description;

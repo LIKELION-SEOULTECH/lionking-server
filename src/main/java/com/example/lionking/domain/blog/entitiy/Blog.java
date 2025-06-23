@@ -21,8 +21,10 @@ public class Blog extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private BlogType blogType;
 
+    private String thumbnailImage;
+
     @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BlogImage> blogImages = new ArrayList<>();
+    private List<BlogMedia> blogMedia = new ArrayList<>();
 
     @Column(nullable = false)
     private String title;
@@ -34,14 +36,16 @@ public class Blog extends BaseTimeEntity {
     private Member author;
 
     @Builder
-    public Blog(BlogType blogType, String title, String content, Member author) {
+    public Blog(BlogType blogType, String thumbnailImage, String title, String content, Member author) {
         this.blogType = blogType;
+        this.thumbnailImage = thumbnailImage;
         this.title = title;
         this.content = content;
         this.author = author;
     }
 
-    public void update(String title, String content) {
+    public void update(String thumbnailImage, String title, String content) {
+        this.thumbnailImage = thumbnailImage;
         this.title = title;
         this.content = content;
     }
@@ -49,17 +53,17 @@ public class Blog extends BaseTimeEntity {
     /**
      * Convenience Method
      */
-    public void addBlogImage(BlogImage blogImage) {
-        if (blogImage != null) {
-            this.blogImages.add(blogImage);
-            blogImage.setBlog(this);
+    public void addBlogImage(BlogMedia blogMedia) {
+        if (blogMedia != null) {
+            this.blogMedia.add(blogMedia);
+            blogMedia.setBlog(this);
         }
     }
-    public void removeBlogImage(BlogImage blogImage) {
-        if (blogImage == null) return;
+    public void removeBlogImage(BlogMedia blogMedia) {
+        if (blogMedia == null) return;
 
-        if (this.blogImages.remove(blogImage)) {
-            blogImage.removeBlog();
+        if (this.blogMedia.remove(blogMedia)) {
+            blogMedia.removeBlog();
         }
     }
 }

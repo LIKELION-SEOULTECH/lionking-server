@@ -1,10 +1,10 @@
 package com.example.lionking.domain.blog.service;
 
-import com.example.lionking.domain.blog.dto.BlogImageRequest;
+import com.example.lionking.domain.blog.dto.BlogMediaRequest;
 import com.example.lionking.domain.blog.dto.BlogRequest;
 import com.example.lionking.domain.blog.dto.BlogResponse;
 import com.example.lionking.domain.blog.entitiy.Blog;
-import com.example.lionking.domain.blog.entitiy.BlogImage;
+import com.example.lionking.domain.blog.entitiy.BlogMedia;
 import com.example.lionking.domain.blog.repository.BlogRepository;
 import com.example.lionking.domain.member.entity.Member;
 import com.example.lionking.domain.member.repository.MemberRepository;
@@ -31,19 +31,20 @@ public class BlogService {
 
         Blog blog = Blog.builder()
                 .blogType(request.blogType())
+                .thumbnailImage(request.thumbnailImage())
                 .title(request.title())
                 .content(request.content())
                 .author(author)
                 .build();
 
-        for (BlogImageRequest img : request.images()) {
-            BlogImage blogImage = BlogImage.builder()
-                    .s3Key(img.s3Key())
-                    .imageType(img.imageType())
+        for (BlogMediaRequest media : request.contentMedia()) {
+            BlogMedia blogMedia = BlogMedia.builder()
+                    .s3Key(media.s3Key())
+                    .mediaType(media.mediaType())
                     .blog(blog)
                     .build();
 
-            blog.addBlogImage(blogImage);
+            blog.addBlogImage(blogMedia);
         }
         return BlogResponse.from(blogRepository.save(blog));
     }
@@ -70,20 +71,20 @@ public class BlogService {
                 .orElseThrow(() -> new CustomException(GlobalErrorCode.NOT_FOUND));
 
         // 기존 이미지 제거
-        for (BlogImage image : new ArrayList<>(blog.getBlogImages())) {
+        for (BlogMedia image : new ArrayList<>(blog.getBlogMedia())) {
             blog.removeBlogImage(image);
         }
 
         // 새로운 이미지 업데이트
-        for (BlogImageRequest img : request.images()) {
-            BlogImage blogImage = BlogImage.builder()
-                    .s3Key(img.s3Key())
-                    .imageType(img.imageType())
+        for (BlogMediaRequest media : request.contentMedia()) {
+            BlogMedia blogMedia = BlogMedia.builder()
+                    .s3Key(media.s3Key())
+                    .mediaType(media.mediaType())
                     .build();
-            blog.addBlogImage(blogImage);
+            blog.addBlogImage(blogMedia);
         }
 
-        blog.update(request.title(), request.content());
+        blog.update(request.thumbnailImage(), request.title(), request.content());
         return BlogResponse.from(blog);
     }
 
