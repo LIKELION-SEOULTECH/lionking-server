@@ -3,7 +3,7 @@ package com.example.lionking.admin.controller;
 import com.example.lionking.admin.dto.GenerationUpdateRequest;
 import com.example.lionking.admin.dto.PositionUpdateRequest;
 import com.example.lionking.admin.dto.RoleUpdateRequest;
-import com.example.lionking.admin.service.AdminService;
+import com.example.lionking.admin.service.AdminMemberService;
 import com.example.lionking.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,12 +13,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/admin")
+@RequestMapping("api/v1/admin/member")
 @RequiredArgsConstructor
-@Tag(name = "Admin API", description = "관리자 기능 API")
-public class AdminController {
+@Tag(name = "Admin Member API", description = "관리자 : 멤버 관리  API")
+public class AdminMemberController {
 
-    private final AdminService adminService;
+    private final AdminMemberService adminMemberService;
 
     /**
      * 대표 권한 이상만 허용
@@ -35,7 +35,7 @@ public class AdminController {
             @PathVariable Long memberId,
             @RequestBody RoleUpdateRequest request
     ) {
-        adminService.updateMemberRole(memberId, request.role());
+        adminMemberService.updateMemberRole(memberId, request.role());
         return ApiResponse.success("멤버 권한 업데이트 성공");
     }
 
@@ -50,7 +50,7 @@ public class AdminController {
             @PathVariable Long memberId,
             @RequestBody PositionUpdateRequest request
     ) {
-        adminService.updateMemberPosition(memberId, request.position());
+        adminMemberService.updateMemberPosition(memberId, request.position());
         return ApiResponse.success("멤버 파트 업데이트 성공");
     }
 
@@ -65,7 +65,7 @@ public class AdminController {
             @PathVariable Long memberId,
             @RequestBody GenerationUpdateRequest request
     ) {
-        adminService.updateMemberGeneration(memberId, request.generation());
+        adminMemberService.updateMemberGeneration(memberId, request.generation());
         return ApiResponse.success("멤버 기수 업데이트 성공");
     }
 

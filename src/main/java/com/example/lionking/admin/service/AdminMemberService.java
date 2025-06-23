@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class AdminService {
+public class AdminMemberService {
 
     private final MemberRepository memberRepository;
 
