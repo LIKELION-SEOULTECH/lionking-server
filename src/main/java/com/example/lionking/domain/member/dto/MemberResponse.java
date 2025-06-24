@@ -9,6 +9,9 @@ public record MemberResponse(
         Long memberId,
         @Schema(description = "사용자 이름", example = "김멋사")
         String username,
+        @Schema(description = "프로필 사진 Presigned Url",
+                example = "https://your-bucket.s3.amazonaws.com/profile/20240624-UUID-profile.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=...")
+        String profileImage,
         @Schema(description = "전공", example = "컴퓨터공학과")
         String department,
         @Schema(description = "직무파트", example = "BACKEND")
@@ -28,6 +31,7 @@ public record MemberResponse(
         return new MemberResponse(
                 member.getId(),
                 member.getUsername(),
+                member.getProfileImage(), // TODO : Presigned Url 변환 필요
                 member.getDepartment(),
                 member.getPosition().name(),
                 member.getRole().name(),
