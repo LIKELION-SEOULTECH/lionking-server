@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum MediaOwner {
     BLOG("블로그"),
-    NOTICE("공지사항")
+    NOTICE("공지사항"),
+    ACTIVITY("활동기록")
     ;
 
     private final String description;
