@@ -35,6 +35,7 @@ public class Member {
     /**
      * 마이페이지에서 추가 업데이트 하는 정보
      */
+    private String profileImage;
     private String department;
     private String descriptionTag;
     private String description;
@@ -42,12 +43,13 @@ public class Member {
     private String portfolioUrls; // Github:https://github.com/Jeongh00,
 
     @Builder
-    public Member(String username, Position position, Role role, User user, String department, String descriptionTag, String description, String techStack, String portfolioUrls) {
+    public Member(String username, Position position, Role role, User user, String profileImage, String department, String descriptionTag, String description, String techStack, String portfolioUrls) {
         this.username = username;
         this.position = position;
         this.role = role;
         this.generation = 13; // 멋사 13기
         this.user = user;
+        this.profileImage = profileImage;
         this.department = department;
         this.descriptionTag = descriptionTag;
         this.description = description;
@@ -56,10 +58,11 @@ public class Member {
     }
 
     /** 프로필 정보 추가 및 수정 */
-    public void updateProfile(String username, String department, String descriptionTag,
+    public void updateProfile(String username, String profileImage, String department, String descriptionTag,
                               String description, String techStack, String portfolioUrls,
                               String position) {
         this.username = username;
+        this.profileImage = profileImage;
         this.department = department;
         this.descriptionTag = descriptionTag;
         this.description = description;
