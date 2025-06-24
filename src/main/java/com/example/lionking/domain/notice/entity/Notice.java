@@ -38,4 +38,5 @@ public class Notice {
         this.title = title;
         this.content = content;
     }
+
 }
