@@ -69,8 +69,4 @@ public class AdminMemberController {
         return ApiResponse.success("멤버 기수 업데이트 성공");
     }
 
-    /**
-     * 운영진 권한 이상만 허용
-     */
-
 }
