@@ -1,11 +1,13 @@
 package com.example.lionking.domain.blog.service;
 
-import com.example.lionking.domain.blog.dto.BlogMediaRequest;
+import com.example.lionking.domain.media.dto.MediaRequest;
 import com.example.lionking.domain.blog.dto.BlogRequest;
 import com.example.lionking.domain.blog.dto.BlogResponse;
 import com.example.lionking.domain.blog.entitiy.Blog;
-import com.example.lionking.domain.blog.entitiy.BlogMedia;
+import com.example.lionking.domain.media.dto.MediaResponse;
 import com.example.lionking.domain.blog.repository.BlogRepository;
+import com.example.lionking.domain.media.entity.MediaOwner;
+import com.example.lionking.domain.media.service.MediaService;
 import com.example.lionking.domain.member.entity.Member;
 import com.example.lionking.domain.member.repository.MemberRepository;
 import com.example.lionking.global.error.GlobalErrorCode;
@@ -14,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,11 +24,12 @@ public class BlogService {
 
     private final BlogRepository blogRepository;
     private final MemberRepository memberRepository;
+    private final MediaService mediaService;
 
     @Transactional
     public BlogResponse postBlog(BlogRequest request, Long authorId) {
         Member author = memberRepository.findById(authorId)
-                .orElseThrow(() -> new CustomException(GlobalErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(GlobalErrorCode.NOT_FOUND, "존재하지 않는 유저입니다."));
 
         Blog blog = Blog.builder()
                 .blogType(request.blogType())
@@ -36,62 +38,83 @@ public class BlogService {
                 .content(request.content())
                 .author(author)
                 .build();
+        blogRepository.save(blog);
 
-        for (BlogMediaRequest media : request.contentMedia()) {
-            BlogMedia blogMedia = BlogMedia.builder()
-                    .s3Key(media.s3Key())
-                    .mediaType(media.mediaType())
-                    .blog(blog)
-                    .build();
+        // 미디어 저장
+        List<MediaRequest> mediaRequests = request.contentMedia().stream()
+                .map(media -> new MediaRequest(
+                        media.s3Key(),
+                        media.mediaType(),
+                        MediaOwner.BLOG,
+                        blog.getId()
+                )).toList();
+        mediaService.saveAll(mediaRequests);
 
-            blog.addBlogImage(blogMedia);
-        }
-        return BlogResponse.from(blogRepository.save(blog));
+        List<MediaResponse> mediaList = mediaService.findAll(MediaOwner.BLOG, blog.getId());
+        return BlogResponse.from(blog, mediaList);
+    }
+
+    @Transactional(readOnly = true)
+    public List<BlogResponse> getAllBlogs() {
+        List<Blog> blogs = blogRepository.findAll();
+        return blogs.stream()
+                .map(blog -> {
+                    List<MediaResponse> mediaList = mediaService.findAll(MediaOwner.BLOG, blog.getId());
+                    return BlogResponse.from(blog, mediaList);
+                })
+                .toList();
     }
 
     @Transactional(readOnly = true)
     public BlogResponse getBlog(Long id) {
         Blog blog = blogRepository.findById(id)
-                .orElseThrow(() -> new CustomException(GlobalErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(GlobalErrorCode.NOT_FOUND, "존재하지 않는 블로그입니다."));
 
-        return BlogResponse.from(blog);
+        List<MediaResponse> mediaList = mediaService.findAll(MediaOwner.BLOG, blog.getId());
+        return BlogResponse.from(blog, mediaList);
     }
 
     @Transactional(readOnly = true)
     public List<BlogResponse> getBlogsByAuthorId(Long authorId) {
         List<Blog> blogs = blogRepository.findAllByAuthorId(authorId);
         return blogs.stream()
-                .map(BlogResponse::from)
+                .map(blog -> {
+                    List<MediaResponse> mediaList = mediaService.findAll(MediaOwner.BLOG, blog.getId());
+                    return BlogResponse.from(blog, mediaList);
+                })
                 .toList();
     }
 
     @Transactional
     public BlogResponse updateBlog(Long blogId, BlogRequest request) {
         Blog blog = blogRepository.findById(blogId)
-                .orElseThrow(() -> new CustomException(GlobalErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(GlobalErrorCode.NOT_FOUND, "존재하지 않는 블로그입니다."));
 
-        // 기존 이미지 제거
-        for (BlogMedia image : new ArrayList<>(blog.getBlogMedia())) {
-            blog.removeBlogImage(image);
-        }
+        // 기존 미디어 삭제
+        mediaService.deleteAll(MediaOwner.BLOG, blog.getId());
 
-        // 새로운 이미지 업데이트
-        for (BlogMediaRequest media : request.contentMedia()) {
-            BlogMedia blogMedia = BlogMedia.builder()
-                    .s3Key(media.s3Key())
-                    .mediaType(media.mediaType())
-                    .build();
-            blog.addBlogImage(blogMedia);
-        }
+        // 새 미디어 저장
+        List<MediaRequest> newMediaRequests = request.contentMedia().stream()
+                .map(media -> new MediaRequest(
+                        media.s3Key(),
+                        media.mediaType(),
+                        MediaOwner.BLOG,
+                        blog.getId()
+                )).toList();
+        mediaService.saveAll(newMediaRequests);
 
         blog.update(request.thumbnailImage(), request.title(), request.content());
-        return BlogResponse.from(blog);
+
+        List<MediaResponse> mediaList = mediaService.findAll(MediaOwner.BLOG, blog.getId());
+        return BlogResponse.from(blog, mediaList);
     }
 
     @Transactional
     public void deleteBlog(Long blogId) {
         Blog blog = blogRepository.findById(blogId)
-                .orElseThrow(() -> new CustomException(GlobalErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(GlobalErrorCode.NOT_FOUND, "존재하지 않는 블로그입니다."));
+
+        mediaService.deleteAll(MediaOwner.BLOG, blog.getId());
         blogRepository.delete(blog);
     }
 }

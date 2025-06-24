@@ -1,28 +1,18 @@
-package com.example.lionking.domain.blog.entitiy;
+package com.example.lionking.domain.activity.entity;
 
-import com.example.lionking.domain.media.entity.Media;
 import com.example.lionking.domain.member.entity.Member;
-import com.example.lionking.global.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Blog extends BaseTimeEntity {
+public class Activity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Enumerated(EnumType.STRING)
-    private BlogType blogType;
-
-    private String thumbnailImage;
 
     @Column(nullable = false)
     private String title;
@@ -34,16 +24,13 @@ public class Blog extends BaseTimeEntity {
     private Member author;
 
     @Builder
-    public Blog(BlogType blogType, String thumbnailImage, String title, String content, Member author) {
-        this.blogType = blogType;
-        this.thumbnailImage = thumbnailImage;
+    public Activity(String title, String content, Member author) {
         this.title = title;
         this.content = content;
         this.author = author;
     }
 
-    public void update(String thumbnailImage, String title, String content) {
-        this.thumbnailImage = thumbnailImage;
+    public void update(String title, String content) {
         this.title = title;
         this.content = content;
     }

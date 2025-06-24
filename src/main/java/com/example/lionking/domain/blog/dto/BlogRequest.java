@@ -1,6 +1,7 @@
 package com.example.lionking.domain.blog.dto;
 
 import com.example.lionking.domain.blog.entitiy.BlogType;
+import com.example.lionking.domain.media.dto.MediaRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
@@ -18,6 +19,6 @@ public record BlogRequest(
                 description = "미디어 리스트",
                 example = "[{\"s3Key\": \"blogs/20250620-UUID-content1.png\", \"mediaType\": \"IMAGE\"}, {\"s3Key\": \"blogs/20250620-UUID-content2.png\", \"mediaType\": \"IMAGE\"}]"
         )
-        List<BlogMediaRequest> contentMedia
+        List<MediaRequest> contentMedia
 ) {
 }
