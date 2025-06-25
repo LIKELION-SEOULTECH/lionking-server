@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public record MemberRequest(
         @Schema(description = "사용자 이름", example = "김멋사")
         String username,
+        @Schema(description = "프로필 사진 S3 Key", example = "profile/20240624-UUID-profile.png")
+        String profileImage,
         @Schema(description = "전공", example = "컴퓨터공학과")
         String department,
         @Schema(description = "직무파트", example = "BACKEND")
@@ -25,6 +27,7 @@ public record MemberRequest(
     public Member toMember() {
         return Member.builder()
                 .username(username)
+                .profileImage(profileImage)
                 .department(department)
                 .position(Position.valueOf(position.toUpperCase()))
                 .descriptionTag(descriptionTag)

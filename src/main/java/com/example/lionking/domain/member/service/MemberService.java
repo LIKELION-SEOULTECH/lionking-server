@@ -33,6 +33,7 @@ public class MemberService {
         Member member = getMemberById(memberId);
         member.updateProfile(
                 request.username(),
+                request.profileImage(),
                 request.department(),
                 request.descriptionTag(),
                 request.description(),
