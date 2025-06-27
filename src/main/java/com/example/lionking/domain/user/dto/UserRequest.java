@@ -35,7 +35,7 @@ public record UserRequest(
         return Member.builder()
                 .username(username)
                 .position(Position.valueOf(position.toUpperCase()))
-                .role(Role.USER) // 회원가입 시 디폹트 권한 = 아기사자
+                .role(Role.GUEST) // 회원가입 시 디폹트 권한 = 아기사자
                 .user(user)
                 .build();
     }
