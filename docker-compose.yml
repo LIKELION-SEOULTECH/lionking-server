@@ -1,19 +1,19 @@
 version: '3.8'
 
 services:
-  lionKing-server:
+  lionking-server:
     build: .
     ports:
       - 8080:8080
     depends_on:
-      lionKing-db:
+      lionking-db:
         condition: service_healthy
-      lionKing-redis:
+      lionking-redis:
         condition: service_healthy
     networks:
       - my-network
 
-  lionKing-db:
+  lionking-db:
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: rkwhr123
@@ -29,7 +29,7 @@ services:
     networks:
       - my-network
 
-  lionKing-redis:
+  lionking-redis:
     image: redis:latest
     ports:
       - 6379:6379

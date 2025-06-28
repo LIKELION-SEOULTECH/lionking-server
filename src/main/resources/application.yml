@@ -2,7 +2,7 @@
     config:
       import: file:.env[.properties]
     datasource:
-      url: jdbc:mysql://lionKing-db:3306/lionking_db   #이건 docker 컨테이너 안에서 실행되는 경우
+      url: jdbc:mysql://lionking-db:3306/lionking_db   #이건 docker 컨테이너 안에서 실행되는 경우
       #url: jdbc:mysql://localhost:3306/lionking_db
       username: root
       password: ${DB_PASSWORD}
