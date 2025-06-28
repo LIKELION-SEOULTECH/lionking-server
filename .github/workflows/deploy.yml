@@ -23,23 +23,19 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Setting application.yml ..
-      - name: Git Checkout
-        uses: actions/checkout@v4
-
-      - name: Create and Upload application.yml
+      - name: Create application.yml
         run: |
-          touch ./src/main/resources/application.yml
-          echo -e "${{secrets.APPLICATION_PROPERTIES}}" | base64 --decode > ./src/main/resources/application.yml
-      - uses: actions/upload-artifact@v4
+          mkdir -p ./src/main/resources
+          echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./src/main/resources/application.yml
+
+      - name: Upload application.yml
+        uses: actions/upload-artifact@v4
         with:
           name: application.yml
           path: ./src/main/resources/application.yml
 
-
-      # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5
 
       - name: Build with Gradle
         run: |
@@ -52,22 +48,20 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      # Docker Build & Push
       - name: Build Docker Image
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/choikang7157 .
 
       - name: Push to DockerHub
         run: docker push ${{ secrets.DOCKER_USERNAME }}/choikang7157
 
-      # EC2 접속 및 도커 컴포즈로 실행
       - name: Docker Image Pull & Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST }} # EC2 Public DNS
+          host: ${{ secrets.EC2_HOST }}
           username: ubuntu
-          key: ${{ secrets.EC2_PRIVATE_KEY }} # pem key
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            sudo docker rm -f $(sudo docker ps -qa)
-            sudo docker pull ${{secrets.DOCKER_USERNAME}}/choikang7157:latest
+            sudo docker rm -f $(sudo docker ps -qa) || true
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/choikang7157:latest
             sudo docker-compose up -d
             sudo docker image prune -f
