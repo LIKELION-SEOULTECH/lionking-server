@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   lionking-server:
-    build: .
+    image: "${DOCKER_USERNAME}/choikang7157:latest"
     ports:
       - 8080:8080
     depends_on:
