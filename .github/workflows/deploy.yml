@@ -1,83 +1,73 @@
-name: Deploy To EC2
-
+name: CI/CD using Github Actions & Docker
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
     steps:
-      - name: Github Repository 파일 불러오기
+      - name: Git Checkout
         uses: actions/checkout@v4
 
-      - name: JDK 17버전 설치
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: 17
+          java-version: '17'
+          distribution: 'temurin'
 
-      - name: application.yml 파일 만들기
+      # Setting application.yml ..
+      - name: Git Checkout
+        uses: actions/checkout@v4
+
+      - name: Create and Upload application.yml
         run: |
-          mkdir -p ./src/main/resources
-          echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./src/main/resources/application.yml
-
-      - name: gradlew 실행 권한 부여
-        run: chmod +x ./gradlew
-
-      - name: 테스트 및 빌드하기
-        run: ./gradlew clean build
-
-      - name: AWS Resource에 접근할 수 있게 AWS credentials 설정
-        uses: aws-actions/configure-aws-credentials@v4
+          touch ./src/main/resources/application.yml
+          echo -e "${{secrets.APPLICATION_PROPERTIES}}" | base64 --decode > ./src/main/resources/application.yml
+      - uses: actions/upload-artifact@v4
         with:
-          aws-region: ap-northeast-2
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          name: application.yml
+          path: ./src/main/resources/application.yml
 
-      - name: ECR에 로그인하기
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Docker 이미지 생성
-        run: docker build -t lionking-server .
+      # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
-      - name: Docker 이미지에 Tag 붙이기
-        run: docker tag lionking-server ${{ steps.login-ecr.outputs.registry }}/lionking-server:latest
-
-      - name: ECR에 Docker 이미지 Push하기
-        run: docker push ${{ steps.login-ecr.outputs.registry }}/lionking-server:latest
-
-      - name: Docker Compose 파일 준비
+      - name: Build with Gradle
         run: |
-          # ECR 레지스트리 주소를 변수로 저장
-          ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}
-          
-          # docker-compose.yml에서 build를 image로 변경
-          sed -i "s|build: \.|image: ${ECR_REGISTRY}/lionking-server:latest|" docker-compose.yml
-          
-          # 변경 결과 확인
-          echo "수정된 docker-compose.yml:"
-          cat docker-compose.yml
+          chmod +x ./gradlew
+          ./gradlew clean build -x test
 
-      - name: 압축하기
-        run: tar -czvf $GITHUB_SHA.tar.gz appspec.yml scripts docker-compose.yml
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: 압축 파일 내용 확인
-        run: |
-          echo "압축 파일 내용:"
-          tar -tzvf $GITHUB_SHA.tar.gz
-          echo "현재 디렉토리 파일들:"
-          ls -la
+      # Docker Build & Push
+      - name: Build Docker Image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/choikang7157 .
 
-      - name: S3에 프로젝트 폴더 업로드하기
-        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.tar.gz s3://lionking-bucket2/$GITHUB_SHA.tar.gz
+      - name: Push to DockerHub
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/choikang7157
 
-      - name: Code Deploy를 활용해 EC2에 프로젝트 코드 배포
-        run: aws deploy create-deployment
-          --application-name lionking-server
-          --deployment-config-name CodeDeployDefault.AllAtOnce
-          --deployment-group-name Production
-          --s3-location bucket=lionking-bucket2,bundleType=tgz,key=$GITHUB_SHA.tar.gz
+      # EC2 접속 및 도커 컴포즈로 실행
+      - name: Docker Image Pull & Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }} # EC2 Public DNS
+          username: ubuntu
+          key: ${{ secrets.EC2_PRIVATE_KEY }} # pem key
+          script: |
+            sudo docker rm -f $(sudo docker ps -qa)
+            sudo docker pull ${{secrets.DOCKER_USERNAME}}/choikang7157:latest
+            sudo docker-compose up -d
+            sudo docker image prune -f
