@@ -1,15 +1,42 @@
 version: '3.8'
+
 services:
-  mysql:
-    image: mysql:latest
-    container_name: likeLion-back
-    environment:
-      MYSQL_ROOT_PASSWORD: root-password
-      MYSQL_DATABASE: lion_db
-      MYSQL_USER: lion-user
-      MYSQL_PASSWORD: lion-password
+  my-server:
+    build: .
     ports:
-      - "3307:3306"
+      - 8080:8080
+    depends_on:
+      lionKing-db:
+        condition: service_healthy
+      likeLion-redis:
+        condition: service_healthy
+    networks:
+      - my-network
+
+  lionKing-db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: rkwhr123
+      MYSQL_DATABASE: lionking_db # MySQL 최초 실행 시 lionking_db라는 데이터베이스를 생성해준다.
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    ports:
+      - 3307:3306
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping" ]
+      interval: 5s
+      retries: 10
+    networks:
+      - my-network
+
+  likeLion-redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      retries: 10
     networks:
       - my-network
 

@@ -10,12 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class ProjectParticipation {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    @Column(length = 300)
-    private String review;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
@@ -25,17 +22,16 @@ public class ProjectParticipation {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private ProjectParticipation(Project project, Member member, String review) {
+    public ProjectParticipation(Project project, Member member) {
         this.project = project;
         this.member = member;
-        this.review = review;
-    }
-
-    public static ProjectParticipation of(Project project, Member member, String review) {
-        return new ProjectParticipation(project,member,review);
     }
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
     }
 }
