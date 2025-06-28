@@ -37,7 +37,6 @@ out/
 .vscode/
 
 ### Resource File
-*.yml
 
 # MySQL 데이터 파일들
 mysql_data/
