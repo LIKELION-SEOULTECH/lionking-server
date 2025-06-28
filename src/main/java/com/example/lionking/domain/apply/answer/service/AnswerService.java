@@ -54,6 +54,9 @@ public class AnswerService {
 
     @Transactional
     public void submitAnswers(Long memberId, AnswerRequest request) {
+
+        // TODO : 지원 마감일 확인 로직 추가
+
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(GlobalErrorCode.NOT_FOUND, "존재하지 않는 멤버"));
 
