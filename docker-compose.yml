@@ -1,14 +1,14 @@
 version: '3.8'
 
 services:
-  my-server:
+  lionKing-server:
     build: .
     ports:
       - 8080:8080
     depends_on:
       lionKing-db:
         condition: service_healthy
-      likeLion-redis:
+      lionKing-redis:
         condition: service_healthy
     networks:
       - my-network
@@ -29,7 +29,7 @@ services:
     networks:
       - my-network
 
-  likeLion-redis:
+  lionKing-redis:
     image: redis:latest
     ports:
       - 6379:6379

@@ -1,41 +1,43 @@
-spring:
-  datasource:
-    #url: jdbc:mysql://lionKing-db:3306/lionking_db   #이건 docker 컨테이너 안에서 실행되는 경우
-    url: jdbc:mysql://localhost:3306/lionking_db
-    username: root
-    password: ${DB_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+  spring:
+    config:
+      import: file:.env[.properties]
+    datasource:
+      url: jdbc:mysql://lionKing-db:3306/lionking_db   #이건 docker 컨테이너 안에서 실행되는 경우
+      #url: jdbc:mysql://localhost:3306/lionking_db
+      username: root
+      password: ${DB_PASSWORD}
+      driver-class-name: com.mysql.cj.jdbc.Driver
 
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-    properties:
+    jpa:
+      show-sql: true
       hibernate:
-        format_sql: true
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        ddl-auto: update
+      properties:
+        hibernate:
+          format_sql: true
+          dialect: org.hibernate.dialect.MySQL8Dialect
 
-  data:
-    redis:
-      host: 127.0.0.1 #로컬 실행의 경우 localhost
-      port: 6379
+    data:
+      redis:
+        host: 127.0.0.1 #로컬 실행의 경우 localhost
+        port: 6379
 
-# JWT 설정 완성
-jwt:
-  secret: ${JWT_SECRET}
-  access-token-validity: 3600000     # 1시간 (ms)
-  refresh-token-validity: 86400000   # 24시간 (ms)
+  # JWT 설정 완성
+  jwt:
+    secret: ${JWT_SECRET}
+    access-token-validity: 3600000     # 1시간 (ms)
+    refresh-token-validity: 86400000   # 24시간 (ms)
 
-cloud:
-  aws:
-    credentials:
-      access-key: ${AWS_ACCESS_KEY_ID}
-      secret-key: ${AWS_SECRET_ACCESS_KEY}
-    region: ap-northeast-2  # 예시: 서울 리전
-  s3:
-    bucket: lionking-bucket2
-    upload:
-      expTime: 600000  # presigned url 만료(ms)
-    download:
-      expTime: 3600000
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY_ID}
+        secret-key: ${AWS_SECRET_ACCESS_KEY}
+      region: ap-northeast-2  # 예시: 서울 리전
+    s3:
+      bucket: lionking-bucket2
+      upload:
+        expTime: 600000  # presigned url 만료(ms)
+      download:
+        expTime: 3600000
 
