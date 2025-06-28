@@ -10,9 +10,14 @@ public enum Position {
     DESIGN("POSITION_DESIGN", "디자인"),
     FRONTEND("POSITION_FRONTEND", "프론트"),
     BACKEND("POSITION_BACKEND", "백엔드"),
-    AI("POSITION_AI", "백엔드")
+    AI("POSITION_AI", "AI")
     ;
 
     private final String position;
     private final String description;
+
+    @Override
+    public String toString() {
+        return description;
+    }
 }
