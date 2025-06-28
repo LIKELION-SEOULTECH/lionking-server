@@ -1,6 +1,6 @@
-package com.example.lionking.domain.recruit.dto;
+package com.example.lionking.domain.recruit.subscribe.dto;
 
-import com.example.lionking.domain.recruit.entity.RecruitSubscribe;
+import com.example.lionking.domain.recruit.subscribe.entity.RecruitSubscribe;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "모집 알림 신청 응답")

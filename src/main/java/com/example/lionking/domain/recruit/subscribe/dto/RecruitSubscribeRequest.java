@@ -1,4 +1,4 @@
-package com.example.lionking.domain.recruit.dto;
+package com.example.lionking.domain.recruit.subscribe.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;

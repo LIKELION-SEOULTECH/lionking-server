@@ -1,4 +1,4 @@
-package com.example.lionking.domain.recruit.entity;
+package com.example.lionking.domain.recruit.subscribe.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

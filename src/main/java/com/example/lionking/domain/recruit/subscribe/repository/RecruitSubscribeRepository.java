@@ -1,6 +1,6 @@
-package com.example.lionking.domain.recruit.repository;
+package com.example.lionking.domain.recruit.subscribe.repository;
 
-import com.example.lionking.domain.recruit.entity.RecruitSubscribe;
+import com.example.lionking.domain.recruit.subscribe.entity.RecruitSubscribe;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

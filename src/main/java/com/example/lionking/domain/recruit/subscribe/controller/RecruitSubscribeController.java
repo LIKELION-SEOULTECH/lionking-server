@@ -1,9 +1,8 @@
-package com.example.lionking.domain.recruit.controller;
+package com.example.lionking.domain.recruit.subscribe.controller;
 
-import com.example.lionking.domain.activity.dto.ActivityResponse;
-import com.example.lionking.domain.recruit.dto.RecruitSubscribeRequest;
-import com.example.lionking.domain.recruit.dto.RecruitSubscribeResponse;
-import com.example.lionking.domain.recruit.service.RecruitSubscribeService;
+import com.example.lionking.domain.recruit.subscribe.dto.RecruitSubscribeRequest;
+import com.example.lionking.domain.recruit.subscribe.dto.RecruitSubscribeResponse;
+import com.example.lionking.domain.recruit.subscribe.service.RecruitSubscribeService;
 import com.example.lionking.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

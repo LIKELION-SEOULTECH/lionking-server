@@ -1,8 +1,8 @@
-package com.example.lionking.domain.recruit.service;
+package com.example.lionking.domain.recruit.subscribe.service;
 
-import com.example.lionking.domain.recruit.dto.RecruitSubscribeResponse;
-import com.example.lionking.domain.recruit.entity.RecruitSubscribe;
-import com.example.lionking.domain.recruit.repository.RecruitSubscribeRepository;
+import com.example.lionking.domain.recruit.subscribe.dto.RecruitSubscribeResponse;
+import com.example.lionking.domain.recruit.subscribe.entity.RecruitSubscribe;
+import com.example.lionking.domain.recruit.subscribe.repository.RecruitSubscribeRepository;
 import com.example.lionking.global.error.GlobalErrorCode;
 import com.example.lionking.global.error.exception.CustomException;
 import lombok.RequiredArgsConstructor;
