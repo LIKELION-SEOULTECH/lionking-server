@@ -8,9 +8,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "User 요청")
 public record UserRequest(
-
-        // TODO : 회원 고유가입번호 추가
-
         @Schema(description = "로그인 아이디", example = "lionking123")
         String loginId,
         @Schema(description = "비밀번호", example = "securePassword123!")
