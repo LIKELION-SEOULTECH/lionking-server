@@ -50,8 +50,20 @@ jobs:
       - name: ECR에 Docker 이미지 Push하기
         run: docker push ${{ steps.login-ecr.outputs.registry }}/lionking-server:latest
 
+      - name: Docker Compose 파일 준비
+        run: |
+          # ECR 레지스트리 주소를 변수로 저장
+          ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}
+          
+          # docker-compose.yml에서 build를 image로 변경
+          sed -i "s|build: \.|image: ${ECR_REGISTRY}/lionking-server:latest|" docker-compose.yml
+          
+          # 변경 결과 확인
+          echo "수정된 docker-compose.yml:"
+          cat docker-compose.yml
+
       - name: 압축하기
-        run: tar -czvf $GITHUB_SHA.tar.gz appspec.yml scripts
+        run: tar -czvf $GITHUB_SHA.tar.gz appspec.yml scripts docker-compose.yml
 
       - name: 압축 파일 내용 확인
         run: |
