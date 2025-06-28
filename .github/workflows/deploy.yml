@@ -18,11 +18,8 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: .env 파일 만들기
-        run: |
-          echo "${{ secrets.EC2_ENV_FILE }}" > .env
-          pwd
-          ls -la .env
+      - name: application.yml 파일 만들기
+        run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./src/main/resources/application.yml
 
       - name: gradlew 실행 권한 부여
         run: chmod +x ./gradlew
@@ -51,7 +48,7 @@ jobs:
         run: docker push ${{ steps.login-ecr.outputs.registry }}/lionking-server:latest
 
       - name: 압축하기
-        run: tar -czvf $GITHUB_SHA.tar.gz appspec.yml .env scripts
+        run: tar -czvf $GITHUB_SHA.tar.gz appspec.yml scripts
 
       - name: 압축 파일 내용 확인
         run: |
