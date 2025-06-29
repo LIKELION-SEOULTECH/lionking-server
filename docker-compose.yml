@@ -5,10 +5,11 @@ services:
     restart: always
     ports:
       - "8080:8080"
-#    environment: # GitHub Secrets → SSH envs 로 넘길 예정
-#      - MYSQLDB_USERNAME=${MYSQLDB_USERNAME}
-#      - MYSQLDB_PASSWORD=${MYSQLDB_PASSWORD}
-#      - MYSQLDB_ROOT_PASSWORD=${MYSQLDB_ROOT_PASSWORD}
+    environment: # GitHub Secrets → SSH envs 로 넘길 예정
+      - MYSQLDB_DATABASE=lionking_db
+      - MYSQLDB_USERNAME=lionking
+      - MYSQLDB_PASSWORD=rkwhr123
+      - MYSQLDB_ROOT_PASSWORD=rkwhr123
 #      - JWT_SECRET=${JWT_SECRET}
 #      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
 #      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
