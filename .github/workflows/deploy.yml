@@ -1,4 +1,4 @@
-name: Shop-Clone CI/CD using Github Actions & Docker..
+name: Shop-Clone CI/CD using Github Actions & Docker
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -17,53 +17,71 @@ jobs:
       - name: Git Checkout
         uses: actions/checkout@v4
 
-      # JDK Set Up
+      # JDK 17 세팅
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # Setting application.yml ..
-      - name: Git Checkout
-        uses: actions/checkout@v4
-
+      # application.yml 생성
       - name: Create application.yml from secret
         run: |
           mkdir -p ./src/main/resources
           echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./src/main/resources/application.yml
 
-      # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
+      # Gradle 캐싱 및 빌드
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+        uses: gradle/actions/setup-gradle@v3
 
       - name: Build with Gradle
         run: |
           chmod +x ./gradlew
           ./gradlew clean build -x test
 
+      # DockerHub 로그인
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      # Docker Build & Push
+      # Docker 이미지 빌드 & 푸시
       - name: Build Docker Image
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/lionking-backend .
 
-      - name: Push to DockerHub
+      - name: Push Docker Image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/lionking-backend
 
-      # EC2 접속 및 도커 명령 | 액션으로 pull까지만 진행
-      - name: Docker Image Pull & Deploy to EC2
-        uses: appleboy/ssh-action@master
+      # EC2에 docker-compose.yml 복사
+      - name: Copy docker-compose.yml to EC2
+        uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.EC2_HOST }} # EC2 Public DNS
+          host: ${{ secrets.EC2_HOST }}
           username: ubuntu
-          key: ${{ secrets.EC2_PRIVATE_KEY }} # pem key
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          source: "docker-compose.yml"
+          target: "~/lionking-server"
+
+      # EC2에서 docker compose up 실행
+      - name: Docker Image Pull & Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            sudo docker rm -f $(sudo docker ps -qa)
-            sudo docker pull ${{secrets.DOCKER_USERNAME}}/lionking-backend:latest
+            set -e
+            cd ~/lionking-server
+
+            # 기존 컨테이너 정리
+            sudo docker rm -f $(sudo docker ps -qa) || true
+
+            # 최신 이미지 pull
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/lionking-backend:latest
+
+            # docker compose up
             sudo docker compose up -d
+
+            # 불필요 이미지 정리
             sudo docker image prune -f
