@@ -1,26 +1,57 @@
-version: '3.8'
 services:
-  mysql:
-    image: mysql:latest
-    container_name: likeLion-db
+  backend:
+    container_name: lionking-backend
+    image: "choikang7157/lionking-backend:latest"
+    ports:
+      - "8080:8080"
     environment:
-      MYSQL_ROOT_PASSWORD: root-password
-      MYSQL_DATABASE: lion_db
-      MYSQL_USER: lion-user
-      MYSQL_PASSWORD: lion-password
+      - MYSQLDB_DATABASE=${MYSQLDB_DATABASE}
+      - MYSQLDB_USERNAME=${MYSQLDB_USERNAME}
+      - MYSQLDB_PASSWORD=${MYSQLDB_PASSWORD}
+      - MYSQLDB_ROOT_PASSWORD=${MYSQLDB_ROOT_PASSWORD}
+      - DOCKERHUB_USERNAME=${DOCKERHUB_USERNAME}
+      - JWT_SECRET=${JWT_SECRET}
+      - CLOUD_AWS_CREDENTIALS_ACCESS_KEY=${CLOUD_AWS_CREDENTIALS_ACCESS_KEY}
+      - CLOUD_AWS_CREDENTIALS_SECRET_KEY=${CLOUD_AWS_CREDENTIALS_SECRET_KEY}
+      - CLOUD_AWS_REGION=${CLOUD_AWS_REGION}
+      - CLOUD_S3_BUCKET=${CLOUD_S3_BUCKET}
+      - CLOUD_S3_UPLOAD_EXPTIME=${CLOUD_S3_UPLOAD_EXPTIME}
+      - CLOUD_S3_DOWNLOAD_EXPTIME=${CLOUD_S3_DOWNLOAD_EXPTIME}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+#    volumes:
+#      - type: volume
+#        source: docker-log #볼륨 이름
+#        target: /lionking-backend/log #컨테이너 내 로그 파일 위치
+    depends_on:
+      lionking-db:
+        condition: service_healthy
+      lionking-redis:
+        condition: service_healthy
+
+  lionking-db:
+    container_name: lionking-db
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQLDB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQLDB_DATABASE}
+      MYSQL_USER: ${MYSQLDB_USERNAME}
+      MYSQL_PASSWORD: ${MYSQLDB_PASSWORD}
+    volumes:
+      - ./mysql_data:/var/lib/mysql
     ports:
       - "3307:3306"
-    networks:
-      - my-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping" ]
+      interval: 5s
+      retries: 10
 
-  redis:
+  lionking-redis:
+    container_name: lionking-redis
     image: redis:latest
-    container_name: likeLion-redis
     ports:
       - "6379:6379"
-    networks:
-      - my-network
-
-networks:
-  my-network:
-    driver: bridge
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      retries: 10

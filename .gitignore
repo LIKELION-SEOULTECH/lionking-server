@@ -37,4 +37,15 @@ out/
 .vscode/
 
 ### Resource File
-*.yml
+
+# MySQL 데이터 파일들
+mysql_data/
+*.sock
+*.pid
+*.log
+
+# 기타 데이터베이스 관련
+/data/
+/logs/
+
+.env
