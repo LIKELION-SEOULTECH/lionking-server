@@ -61,7 +61,7 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Push Docker image
-        run: docker push $IMAGE_NAME
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/lionking-backend:latest
 
       # 3) docker-compose.yml만 EC2로 복사
       - name: Copy compose .env to EC2
