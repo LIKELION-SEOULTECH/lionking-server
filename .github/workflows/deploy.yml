@@ -6,6 +6,7 @@ on:
   push:
     branches: [main]
 
+
 # 레지스트리 태그를 한 곳에 모아두기
 env:
   IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/lionking-backend:latest
