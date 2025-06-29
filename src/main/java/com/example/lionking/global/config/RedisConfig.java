@@ -11,11 +11,15 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
 
+/*
     @Value("${spring.data.redis.host}")
     private String redisHost;
 
     @Value("${spring.data.redis.port}")
     private int redisPort;
+*/
+    private final String redisHost = "lionking-redis"; // 또는 "localhost"
+    private final int redisPort = 6379;
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
