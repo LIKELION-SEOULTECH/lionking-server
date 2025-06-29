@@ -19,6 +19,8 @@ services:
       - CLOUD_S3_DOWNLOAD_EXPTIME=${CLOUD_S3_DOWNLOAD_EXPTIME}
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
 #    volumes:
 #      - type: volume
 #        source: docker-log #볼륨 이름
