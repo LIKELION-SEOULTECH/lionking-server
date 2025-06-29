@@ -49,5 +49,3 @@ mysql_data/
 /logs/
 
 .env
-.application.yml
-application.yml
