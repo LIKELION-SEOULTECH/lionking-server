@@ -29,7 +29,7 @@ jobs:
       - name: Run tests
         run: ./gradlew test
 
-  # ───────────────────────── CD (develop 브랜치 푸시 시) ─────────────────────────
+  # ───────────────────────── CD (main 브랜치 푸시 시) ─────────────────────────
   cd:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -66,7 +66,6 @@ jobs:
       # 3) docker-compose.yml만 EC2로 복사
       - name: Copy compose .env to EC2
         uses: appleboy/scp-action@v0.1.7
-
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
@@ -77,7 +76,6 @@ jobs:
       # 4) EC2로 배포 (compose pull/up)
       - name: Deploy to EC2 with Compose
         uses: appleboy/ssh-action@v0.1.7
-
         env:
           MYSQLDB_DATABASE: ${{ secrets.MYSQLDB_DATABASE }}
           MYSQLDB_USERNAME: ${{ secrets.MYSQLDB_USERNAME }}
@@ -93,17 +91,11 @@ jobs:
           CLOUD_S3_DOWNLOAD_EXPTIME: ${{ secrets.CLOUD_S3_DOWNLOAD_EXPTIME }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          with:
-            host: ${{ secrets.EC2_HOST }}
-            username: ${{ secrets.EC2_USERNAME }}
-            key: ${{ secrets.EC2_PRIVATE_KEY }}
-            envs: MYSQLDB_DATABASE,MYSQLDB_USERNAME,MYSQLDB_PASSWORD,MYSQLDB_ROOT_PASSWORD,DOCKERHUB_USERNAME,JWT_SECRET,CLOUD_AWS_CREDENTIALS_ACCESS_KEY,CLOUD_AWS_CREDENTIALS_SECRET_KEY,CLOUD_AWS_REGION,CLOUD_S3_BUCKET,CLOUD_S3_UPLOAD_EXPTIME,CLOUD_S3_DOWNLOAD_EXPTIME,AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY
-
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-
+          envs: MYSQLDB_DATABASE,MYSQLDB_USERNAME,MYSQLDB_PASSWORD,MYSQLDB_ROOT_PASSWORD,DOCKERHUB_USERNAME,JWT_SECRET,CLOUD_AWS_CREDENTIALS_ACCESS_KEY,CLOUD_AWS_CREDENTIALS_SECRET_KEY,CLOUD_AWS_REGION,CLOUD_S3_BUCKET,CLOUD_S3_UPLOAD_EXPTIME,CLOUD_S3_DOWNLOAD_EXPTIME,AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY
           script: |
             cd ~/lionking-server
 
