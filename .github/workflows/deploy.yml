@@ -74,7 +74,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "dokcker-compose.yml"
+          source: "docker-compose.yml"
           target: "~/lionking-server" #어디로 해야되지
 
       # 4) EC2로 배포 (compose pull/up)
