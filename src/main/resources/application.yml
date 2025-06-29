@@ -2,7 +2,8 @@ spring:
   config:
     import: optional:file:.env[.properties]
   datasource:
-    url: jdbc:mysql://lionking-db:3306/${MYSQLDB_DATABASE}
+    #url: jdbc:mysql://lionking-db:3306/${MYSQLDB_DATABASE}
+    url: jdbc:mysql://localhost:3306/lionking-db
     username: ${MYSQLDB_USERNAME}
     password: ${MYSQLDB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -10,7 +11,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
