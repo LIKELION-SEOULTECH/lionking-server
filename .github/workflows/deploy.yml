@@ -6,7 +6,6 @@ on:
   push:
     branches: [main]
 
-
 # 레지스트리 태그를 한 곳에 모아두기
 env:
   IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/lionking-backend:latest
@@ -104,9 +103,6 @@ jobs:
           
             # 기존 docker-compose 서비스들 정리
             docker compose down --remove-orphans 2>/dev/null || true
-            
-            # 사용하지 않는 컨테이너 정리
-            docker container prune -f 2>/dev/null || true
           
             # 최신 이미지 가져와 재배치
             docker compose pull
