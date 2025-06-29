@@ -6,8 +6,6 @@ on:
   push:
     branches: [main]
 
-
-# 레지스트리 태그를 한 곳에 모아두기
 env:
   IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/lionking-backend:latest
 
@@ -33,11 +31,9 @@ jobs:
       - name: Run tests
         run: ./gradlew test
 
-
   cd:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-
     steps:
       # 1) 소스 체크아웃 + JAR 빌드
       - uses: actions/checkout@v3
@@ -67,50 +63,39 @@ jobs:
       - name: Push Docker image
         run: docker push $IMAGE_NAME
 
-      # 3) docker-compose.yml만 EC2로 복사
-      - name: Copy compose to EC2
-        uses: appleboy/scp-action@v0.1.7
+      # 3) .env 파일 생성
+      - name: Create .env file
+        run: |
+          echo "MYSQLDB_USERNAME=${{ secrets.MYSQLDB_USERNAME }}" > .env
+          echo "MYSQLDB_PASSWORD=${{ secrets.MYSQLDB_PASSWORD }}" >> .env
+          echo "MYSQLDB_ROOT_PASSWORD=${{ secrets.MYSQLDB_ROOT_PASSWORD }}" >> .env
+          echo "DOCKERHUB_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
 
+      # 4) docker-compose.yml, .env 파일 EC2로 복사
+      - name: Copy compose and .env to EC2
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           source: "docker-compose.yml,.env"
-          target: "~/lionking-server" #어디로 해야되지
+          target: "~/lionking-server"
 
-      # 4) EC2로 배포 (compose pull/up)
+      # 5) EC2에서 docker compose로 배포
       - name: Deploy to EC2 with Compose
         uses: appleboy/ssh-action@v0.1.7
-        env:                           # ← 추가
-          MYSQLDB_USERNAME: ${{ secrets.MYSQLDB_USERNAME }}
-          MYSQLDB_PASSWORD: ${{ secrets.MYSQLDB_PASSWORD }}
-          MYSQLDB_ROOT_PASSWORD: ${{ secrets.MYSQLDB_ROOT_PASSWORD }}
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-
-          # compose.yml 안에서 ${MYSQLDB_*}, ${DOCKERHUB_USERNAME} 변수를 쓰므로 전달
-          envs: MYSQLDB_USERNAME,MYSQLDB_PASSWORD,MYSQLDB_ROOT_PASSWORD,DOCKERHUB_USERNAME,JWT_SECRET,AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY
-
           script: |
             set -e
             cd ~/lionking-server
-          
-            # 기존 docker-compose 서비스들 정리
             docker compose down --remove-orphans 2>/dev/null || true
-            
-            # 사용하지 않는 컨테이너 정리
             docker container prune -f 2>/dev/null || true
-          
-            # 최신 이미지 가져와 재배치
             docker compose pull
             docker compose up -d --remove-orphans
-          
-            # 불필요 이미지 정리
             docker image prune -f --filter dangling=true
