@@ -28,7 +28,7 @@ services:
     image: mysql:latest
     restart: always
     environment:
-      #MYSQL_ROOT_PASSWORD: rkwhr123
+      MYSQL_ROOT_PASSWORD: rkwhr123
       MYSQL_DATABASE: lionking_db
       MYSQL_USER: lionking
       MYSQL_PASSWORD: rkwhr123
