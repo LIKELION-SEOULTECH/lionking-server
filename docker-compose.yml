@@ -1,7 +1,5 @@
 services:
   backend:
-    env_file:
-      - .env
     container_name: lionking-backend
     image: "choikang7157/lionking-backend:latest"
     ports:
