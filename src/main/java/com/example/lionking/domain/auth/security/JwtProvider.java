@@ -1,4 +1,3 @@
-/*
 package com.example.lionking.domain.auth.security;
 
 import io.jsonwebtoken.JwtException;
@@ -96,4 +95,4 @@ public class JwtProvider {
                 .getExpiration();
     }
 
-}*/
+}

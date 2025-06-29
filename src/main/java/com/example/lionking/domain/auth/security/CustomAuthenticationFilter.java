@@ -1,4 +1,3 @@
-/*
 package com.example.lionking.domain.auth.security;
 
 import com.example.lionking.domain.auth.dto.UserDetailsImpl;
@@ -54,4 +53,4 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-}*/
+}

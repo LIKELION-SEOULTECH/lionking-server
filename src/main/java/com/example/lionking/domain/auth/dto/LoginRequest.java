@@ -1,4 +1,3 @@
-/*
 package com.example.lionking.domain.auth.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,4 +9,4 @@ public record LoginRequest(
         @Schema(description = "비밀번호", example = "securePassword123!")
         String password
 ) {
-}*/
+}

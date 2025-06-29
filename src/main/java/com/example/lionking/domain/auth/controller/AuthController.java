@@ -1,4 +1,3 @@
-/*
 package com.example.lionking.domain.auth.controller;
 
 import com.example.lionking.domain.auth.service.AuthService;
@@ -62,4 +61,4 @@ public class AuthController {
         return ApiResponse.success(newTokens, "Access + Refresh Token 재발급 성공");
     }
 
-}*/
+}

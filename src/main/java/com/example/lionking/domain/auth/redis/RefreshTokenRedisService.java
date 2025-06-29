@@ -1,4 +1,3 @@
-/*
 package com.example.lionking.domain.auth.redis;
 
 import lombok.RequiredArgsConstructor;
@@ -33,4 +32,4 @@ public class RefreshTokenRedisService {
         redisTemplate.delete(getKey(userId));
     }
 
-}*/
+}

@@ -1,4 +1,3 @@
-/*
 package com.example.lionking.domain.auth.dto;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -49,4 +48,4 @@ public record UserDetailsImpl(
         return true;
     }
 
-}*/
+}

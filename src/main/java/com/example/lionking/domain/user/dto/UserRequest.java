@@ -8,8 +8,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "User 요청")
 public record UserRequest(
-        // TODO : 회원 고유가입번호, 기수 추가
-
         @Schema(description = "로그인 아이디", example = "lionking123")
         String loginId,
         @Schema(description = "비밀번호", example = "securePassword123!")
@@ -34,7 +32,7 @@ public record UserRequest(
         return Member.builder()
                 .username(username)
                 .position(Position.valueOf(position.toUpperCase()))
-                .role(Role.USER) // 회원가입 시 디폹트 권한 = 아기사자
+                .role(Role.GUEST) // 회원가입 시 디폹트 권한 = 아기사자
                 .user(user)
                 .build();
     }

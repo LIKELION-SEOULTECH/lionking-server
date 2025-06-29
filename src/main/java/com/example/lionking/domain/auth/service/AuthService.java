@@ -1,4 +1,3 @@
-/*
 package com.example.lionking.domain.auth.service;
 
 import com.example.lionking.domain.auth.redis.RefreshTokenRedisService;
@@ -82,4 +81,4 @@ public class AuthService {
                 "refreshToken", newRefreshToken
         );
     }
-}*/
+}

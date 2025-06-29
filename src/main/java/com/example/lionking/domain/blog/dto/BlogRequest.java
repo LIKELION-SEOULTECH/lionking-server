@@ -1,6 +1,7 @@
 package com.example.lionking.domain.blog.dto;
 
 import com.example.lionking.domain.blog.entitiy.BlogType;
+import com.example.lionking.domain.media.dto.MediaRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
@@ -12,10 +13,12 @@ public record BlogRequest(
         String title,
         @Schema(description = "본문", example = "이것은 본문이여!")
         String content,
+        @Schema(description = "썸네일 이미지", example = "blogs/20250620-UUID-thumb.png")
+        String thumbnailImage,
         @Schema(
-                description = "이미지 리스트",
-                example = "[{\"s3Key\": \"s3/image1.png\", \"imageType\": \"THUMBNAIL\"}, {\"s3Key\": \"s3/image2.png\", \"imageType\": \"CONTENT\"}]"
+                description = "미디어 리스트",
+                example = "[{\"s3Key\": \"blogs/20250620-UUID-content1.png\", \"mediaType\": \"IMAGE\"}, {\"s3Key\": \"blogs/20250620-UUID-content2.png\", \"mediaType\": \"IMAGE\"}]"
         )
-        List<BlogImageRequest> images
+        List<MediaRequest> contentMedia
 ) {
 }

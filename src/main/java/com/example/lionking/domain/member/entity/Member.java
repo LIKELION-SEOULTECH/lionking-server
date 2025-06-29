@@ -1,16 +1,11 @@
 package com.example.lionking.domain.member.entity;
 
-import com.example.lionking.domain.project.entity.ProjectImage;
-import com.example.lionking.domain.project.entity.ProjectParticipation;
 import com.example.lionking.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -40,6 +35,7 @@ public class Member {
     /**
      * 마이페이지에서 추가 업데이트 하는 정보
      */
+    private String profileImage;
     private String department;
     private String descriptionTag;
     private String description;
@@ -47,12 +43,13 @@ public class Member {
     private String portfolioUrls; // Github:https://github.com/Jeongh00,
 
     @Builder
-    public Member(String username, Position position, Role role, User user, String department, String descriptionTag, String description, String techStack, String portfolioUrls) {
+    public Member(String username, Position position, Role role, User user, String profileImage, String department, String descriptionTag, String description, String techStack, String portfolioUrls) {
         this.username = username;
         this.position = position;
         this.role = role;
         this.generation = 13; // 멋사 13기
         this.user = user;
+        this.profileImage = profileImage;
         this.department = department;
         this.descriptionTag = descriptionTag;
         this.description = description;
@@ -60,10 +57,12 @@ public class Member {
         this.portfolioUrls = portfolioUrls;
     }
 
-    public void updateProfile(String username, String department, String descriptionTag,
+    /** 프로필 정보 추가 및 수정 */
+    public void updateProfile(String username, String profileImage, String department, String descriptionTag,
                               String description, String techStack, String portfolioUrls,
                               String position) {
         this.username = username;
+        this.profileImage = profileImage;
         this.department = department;
         this.descriptionTag = descriptionTag;
         this.description = description;
@@ -71,4 +70,16 @@ public class Member {
         this.portfolioUrls = portfolioUrls;
         this.position = Position.valueOf(position.toUpperCase());
     }
+
+    /** [관리자] : 멤버 정보 수정 */
+    public void updateRole(Role role) {
+        this.role = role;
+    }
+    public void updatePosition(Position position) {
+        this.position = position;
+    }
+    public void updateGeneration(int generation) {
+        this.generation = generation;
+    }
 }
+

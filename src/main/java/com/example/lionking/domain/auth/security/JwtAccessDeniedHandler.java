@@ -1,4 +1,3 @@
-/*
 package com.example.lionking.domain.auth.security;
 
 import com.example.lionking.global.error.GlobalErrorCode;
@@ -17,11 +16,9 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    */
-/**
+    /**
      * 권한 없는 사용자 접근 처리
-     *//*
-
+     */
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
                        AccessDeniedException accessDeniedException) throws IOException {
@@ -33,4 +30,4 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         response.getWriter().write(objectMapper.writeValueAsString(body));
     }
 
-}*/
+}

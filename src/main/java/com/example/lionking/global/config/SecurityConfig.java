@@ -1,35 +1,37 @@
 package com.example.lionking.global.config;
 
-/*import com.example.lionking.domain.auth.security.CustomAuthenticationFilter;
+import com.example.lionking.domain.auth.security.CustomAuthenticationFilter;
 import com.example.lionking.domain.auth.security.JwtAccessDeniedHandler;
 import com.example.lionking.domain.auth.security.JwtAuthenticationEntryPoint;
-import com.example.lionking.domain.auth.security.JwtProvider;*/
+import com.example.lionking.domain.auth.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-//import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-/*    private final JwtProvider jwtProvider;
+    private final JwtProvider jwtProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;*/
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        //CustomAuthenticationFilter customFilter = new CustomAuthenticationFilter(jwtProvider);
+        CustomAuthenticationFilter customFilter = new CustomAuthenticationFilter(jwtProvider);
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -39,14 +41,14 @@ public class SecurityConfig {
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-/*
+
                 .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
 
                 .exceptionHandling((exceptions) ->
                         exceptions
                                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                                 .accessDeniedHandler(jwtAccessDeniedHandler)
-                )*/
+                )
 
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(
@@ -57,6 +59,8 @@ public class SecurityConfig {
                                 "/swagger-resources/**",
                                 "/webjars/**").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/**").permitAll()
+                        .requestMatchers("/api/v1/admin/**").hasAnyRole("REPRESENTATIVE", "MANAGER")
                         .anyRequest().authenticated()
                 );
 

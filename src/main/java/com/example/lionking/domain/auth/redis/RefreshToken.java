@@ -1,4 +1,3 @@
-/*
 package com.example.lionking.domain.auth.redis;
 
 import lombok.*;
@@ -15,4 +14,4 @@ public class RefreshToken implements Serializable {
     private String token;
     private LocalDateTime expiry;
 
-}*/
+}
