@@ -31,7 +31,7 @@ jobs:
 
   # ───────────────────────── CD (develop 브랜치 푸시 시) ─────────────────────────
   cd:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
