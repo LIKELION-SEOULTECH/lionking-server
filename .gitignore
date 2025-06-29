@@ -51,3 +51,4 @@ mysql_data/
 .env
 .application.yml
 application.ymlsrc/main/resources/application.yml
+src/main/resources/application.yml

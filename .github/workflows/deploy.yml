@@ -30,7 +30,7 @@ jobs:
 
       - name: Create and Upload application.yml
         run: |
-          touch ./src/main/resources/application.yml
+          mkdir -p ./src/main/resources
           echo -e "${{secrets.APPLICATION_PROPERTIES}}" | base64 --decode > ./src/main/resources/application.yml
       - uses: actions/upload-artifact@v4
         with:
