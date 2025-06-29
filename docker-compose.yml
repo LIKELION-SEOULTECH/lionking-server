@@ -1,18 +1,26 @@
 services:
   backend:
+    env_file:
+      - .env
     container_name: lionking-backend
-    image: "choikang7157/lionking-backend:latest" #로컬에서 실행해도 되는지?
-    restart: always
+    image: "choikang7157/lionking-backend:latest"
     ports:
       - "8080:8080"
-    environment: # GitHub Secrets → SSH envs 로 넘길 예정
-      - MYSQLDB_DATABASE=lionking_db
-      - MYSQLDB_USERNAME=lionking
-      - MYSQLDB_PASSWORD=rkwhr123
-      - MYSQLDB_ROOT_PASSWORD=rkwhr123
-#      - JWT_SECRET=${JWT_SECRET}
-#      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-#      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    environment:
+      - MYSQLDB_DATABASE=${MYSQLDB_DATABASE}
+      - MYSQLDB_USERNAME=${MYSQLDB_USERNAME}
+      - MYSQLDB_PASSWORD=${MYSQLDB_PASSWORD}
+      - MYSQLDB_ROOT_PASSWORD=${MYSQLDB_ROOT_PASSWORD}
+      - DOCKERHUB_USERNAME=${DOCKERHUB_USERNAME}
+      - JWT_SECRET=${JWT_SECRET}
+      - CLOUD_AWS_CREDENTIALS_ACCESS_KEY=${CLOUD_AWS_CREDENTIALS_ACCESS_KEY}
+      - CLOUD_AWS_CREDENTIALS_SECRET_KEY=${CLOUD_AWS_CREDENTIALS_SECRET_KEY}
+      - CLOUD_AWS_REGION=${CLOUD_AWS_REGION}
+      - CLOUD_S3_BUCKET=${CLOUD_S3_BUCKET}
+      - CLOUD_S3_UPLOAD_EXPTIME=${CLOUD_S3_UPLOAD_EXPTIME}
+      - CLOUD_S3_DOWNLOAD_EXPTIME=${CLOUD_S3_DOWNLOAD_EXPTIME}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 #    volumes:
 #      - type: volume
 #        source: docker-log #볼륨 이름
@@ -26,12 +34,11 @@ services:
   lionking-db:
     container_name: lionking-db
     image: mysql:latest
-    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rkwhr123
-      MYSQL_DATABASE: lionking_db
-      MYSQL_USER: lionking
-      MYSQL_PASSWORD: rkwhr123
+      MYSQL_ROOT_PASSWORD: ${MYSQLDB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQLDB_DATABASE}
+      MYSQL_USER: ${MYSQLDB_USERNAME}
+      MYSQL_PASSWORD: ${MYSQLDB_PASSWORD}
     volumes:
       - ./mysql_data:/var/lib/mysql
     ports:
@@ -44,7 +51,6 @@ services:
   lionking-redis:
     container_name: lionking-redis
     image: redis:latest
-    restart: always
     ports:
       - "6379:6379"
     healthcheck:
