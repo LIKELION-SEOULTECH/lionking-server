@@ -98,6 +98,16 @@ jobs:
           envs: MYSQLDB_USERNAME,MYSQLDB_PASSWORD,MYSQLDB_ROOT_PASSWORD,DOCKERHUB_USERNAME,JWT_SECRET,AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY
 
           script: |
+            echo "===== ENV CHECK ====="
+            echo "MYSQLDB_USERNAME: $MYSQLDB_USERNAME"
+            echo "MYSQLDB_PASSWORD: $MYSQLDB_PASSWORD"
+            echo "MYSQLDB_ROOT_PASSWORD: $MYSQLDB_ROOT_PASSWORD"
+            echo "DOCKERHUB_USERNAME: $DOCKERHUB_USERNAME"
+            echo "JWT_SECRET: $JWT_SECRET"
+            echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
+            echo "AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY"
+            echo "====================="
+            
             set -e
             cd ~/lionking-server
           
