@@ -50,6 +50,7 @@ public class ProjectController {
     public ApiResponse<ProjectDetailResponse> getProject(@PathVariable Long projectId) {
         ProjectDetailResponse project = projectService.getProject(projectId);
         return ApiResponse.success(project);
+        // ::todo:: memberid값 넘겨줘야 함
     }
 
     @Operation(summary = "단일 프로젝트 수정", description = "단일 프로젝트 수정 API")
