@@ -70,4 +70,9 @@ public class ProjectController {
         projectService.deleteProject(projectId);
         return ApiResponse.success("프로젝트 삭제 성공");
     }
+
+    @Operation(summary = "멤버가 참여한 프로젝트")
+
+    @Operation(summary = "멤버가 프로젝트에 작성한 회고")
+
 }
