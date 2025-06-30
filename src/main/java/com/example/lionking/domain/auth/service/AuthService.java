@@ -1,10 +1,12 @@
 package com.example.lionking.domain.auth.service;
 
+import com.example.lionking.domain.auth.dto.LoginUserResponse;
 import com.example.lionking.domain.auth.redis.RefreshTokenRedisService;
 import com.example.lionking.domain.auth.security.JwtProvider;
 import com.example.lionking.domain.member.entity.Member;
 import com.example.lionking.domain.auth.dto.LoginRequest;
 import com.example.lionking.domain.auth.dto.LoginResponse;
+import com.example.lionking.domain.member.repository.MemberRepository;
 import com.example.lionking.domain.user.entity.User;
 import com.example.lionking.domain.user.repository.UserRepository;
 import com.example.lionking.global.error.GlobalErrorCode;
@@ -24,6 +26,7 @@ public class AuthService {
     private final RefreshTokenRedisService refreshTokenService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public LoginResponse login(LoginRequest request) {
@@ -80,5 +83,18 @@ public class AuthService {
                 "accessToken", newAccessToken,
                 "refreshToken", newRefreshToken
         );
+    }
+
+    public LoginUserResponse checkUser(String accessToken) {
+        if (accessToken.startsWith("Bearer ")) {
+            accessToken = accessToken.substring(7);
+        }
+
+        Long userId = jwtProvider.getUserIdFromAccessToken(accessToken);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(GlobalErrorCode.NOT_FOUND));
+        Member member = memberRepository.findById(user.getMember().getId())
+                .orElseThrow(() -> new CustomException(GlobalErrorCode.NOT_FOUND));
+        return LoginUserResponse.from(member);
     }
 }

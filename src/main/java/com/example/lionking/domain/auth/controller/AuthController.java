@@ -1,5 +1,6 @@
 package com.example.lionking.domain.auth.controller;
 
+import com.example.lionking.domain.auth.dto.LoginUserResponse;
 import com.example.lionking.domain.auth.service.AuthService;
 import com.example.lionking.domain.auth.dto.LoginRequest;
 import com.example.lionking.domain.auth.dto.LoginResponse;
@@ -61,4 +62,10 @@ public class AuthController {
         return ApiResponse.success(newTokens, "Access + Refresh Token 재발급 성공");
     }
 
+    @GetMapping("/me")
+    @Operation(summary = "access토큰으로 user인증할 수 있는 API")
+    public ApiResponse<LoginUserResponse> checkUser(@RequestHeader("Authorization") String accessToken) {
+        LoginUserResponse loginUserResponse = authService.checkUser(accessToken);
+        return ApiResponse.success(loginUserResponse);
+    }
 }
