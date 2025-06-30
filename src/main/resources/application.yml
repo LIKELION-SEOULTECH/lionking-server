@@ -8,6 +8,10 @@ spring:
     password: ${MYSQLDB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+logging:
+  level:
+    org.springframework.web: debug
+
   jpa:
     show-sql: true
     hibernate:
