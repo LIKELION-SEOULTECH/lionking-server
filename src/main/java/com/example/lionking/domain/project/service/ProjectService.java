@@ -69,6 +69,18 @@ public class ProjectService {
     public ProjectDetailResponse getProject(Long projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new CustomException(GlobalErrorCode.NOT_FOUND));
+        //참여자 id
+        List<Long> participationIds = project.getProjectParticipations().stream()
+                .map(participation -> participation.getMember().getId())
+                .collect(Collectors.toList());
+        //참여자 이름
+        List<String> participationNames = project.getProjectParticipations().stream()
+                .map(participation -> participation.getMember().getUsername())
+                .collect(Collectors.toList());
+        //참여자 파트
+        List<String> participationDepartments = project.getProjectParticipations().stream()
+                .map(participation -> participation.getMember().getDepartment())
+                .collect(Collectors.toList());
 
         return ProjectDetailResponse.from(project,s3Service);
     }

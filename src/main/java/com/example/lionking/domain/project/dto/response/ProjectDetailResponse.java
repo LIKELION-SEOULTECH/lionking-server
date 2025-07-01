@@ -1,6 +1,6 @@
 package com.example.lionking.domain.project.dto.response;
 
-import com.example.lionking.domain.member.entity.Member;
+import com.example.lionking.domain.project.dto.ParticipationDetailDto;
 import com.example.lionking.domain.project.entity.Project;
 import com.example.lionking.domain.project.entity.ProjectParticipation;
 import com.example.lionking.domain.project.entity.ProjectRetrospection;
@@ -25,12 +25,12 @@ public class ProjectDetailResponse {
     private Integer generation;
     private ProjectType projectType;
     private String thumbnail;
-    private List<String> participations;
+    private List<ParticipationDetailDto> participations;
     private List<String> landingImages;
     private List<Map<String, String>> retrospections;
 
     @Builder
-    public ProjectDetailResponse(Long id, String title, String description, String videoLink, Integer generation, ProjectType projectType, String thumbnail, List<String> participations, List<String> landingImages, List<Map<String, String>> retrospections) {  // 타입 변경) {
+    public ProjectDetailResponse(Long id, String title, String description, String videoLink, Integer generation, ProjectType projectType, String thumbnail, List<ParticipationDetailDto> participations, List<String> landingImages, List<Map<String, String>> retrospections) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -53,11 +53,38 @@ public class ProjectDetailResponse {
                 .projectType(project.getProjectType())
                 .thumbnail(s3Service.getPresignedUrlForGet(project.getThumbnailKey()))
                 .landingImages(createLandingImages(project.getLandingKeys(), s3Service))
-                .participations(findParticipations(project.getProjectParticipations()))
+                .participations(createParticipationDetails(project.getProjectParticipations(), project.getProjectRetrospections(), s3Service))
                 .retrospections(createRetrospection(project.getProjectRetrospections()))
                 .build();
     }
 
+    // 새로 완성된 메서드
+    private static List<ParticipationDetailDto> createParticipationDetails(
+            List<ProjectParticipation> projectParticipations,
+            List<ProjectRetrospection> projectRetrospections,
+            S3Service s3Service
+    ) {
+        // 회고를 memberId 기준으로 Map화
+        Map<Long, String> retrospectionMap = projectRetrospections.stream()
+                .collect(Collectors.toMap(
+                        r -> r.getMember().getId(),
+                        ProjectRetrospection::getContent,
+                        (existing, replacement) -> existing
+                ));
+
+        return projectParticipations.stream()
+                .map(participation -> ParticipationDetailDto.builder()
+                        .memberId(participation.getMember().getId())
+                        .username(participation.getMember().getUsername())
+                        .profileImage(s3Service.getPresignedUrlForGet(participation.getMember().getProfileImage()))
+                        .position(participation.getMember().getPosition().name())
+                        .role(participation.getMember().getRole().name())
+                        .retrospection(retrospectionMap.getOrDefault(participation.getMember().getId(), null))
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    // 기존 메서드들 그대로 유지
     private static List<String> findParticipations(List<ProjectParticipation> projectParticipations) {
         return projectParticipations.stream()
                 .map(projectParticipation -> projectParticipation.getMember().getUsername())
