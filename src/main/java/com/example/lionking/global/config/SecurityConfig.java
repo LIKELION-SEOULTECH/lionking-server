@@ -13,6 +13,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -66,10 +68,20 @@ public class SecurityConfig {
         return http.build();
     }
 
+
     @Bean
+    public PasswordEncoder passwordEncoder() {
+        // 임시로 평문 비밀번호 허용 (개발 환경에서만)
+        return NoOpPasswordEncoder.getInstance();
+
+        // 원래는 BCrypt 사용
+        // return new BCryptPasswordEncoder();
+    }
+
+/*    @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
-    }
+    }*/
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
