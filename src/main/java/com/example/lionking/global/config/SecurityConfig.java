@@ -23,7 +23,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
+//@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final JwtProvider jwtProvider;
@@ -44,7 +44,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-                //.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
 
                 .exceptionHandling((exceptions) ->
                         exceptions
