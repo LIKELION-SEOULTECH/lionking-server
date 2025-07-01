@@ -5,6 +5,8 @@ import com.example.lionking.domain.blog.entitiy.BlogType;
 import com.example.lionking.domain.media.dto.MediaResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record BlogResponse(
@@ -24,7 +26,13 @@ public record BlogResponse(
                 description = "미디어 리스트",
                 example = "[{\"s3Key\": \"blogs/20250620-UUID-content1.png\", \"mediaType\": \"IMAGE\"}, {\"s3Key\": \"blogs/20250620-UUID-content2.png\", \"mediaType\": \"IMAGE\"}]"
         )
-        List<MediaResponse> contentMedia
+        List<MediaResponse> contentMedia,
+        // 작성자 이름
+        String MemberName,
+        String position,
+        @Schema(description = "작성일", example = "2025-07-01T14:30:00")
+        LocalDate createdAt
+
 ) {
     public static BlogResponse from(Blog blog, List<MediaResponse> mediaList) {
         return new BlogResponse(
@@ -34,7 +42,10 @@ public record BlogResponse(
                 blog.getTitle(),
                 blog.getContent(),
                 blog.getThumbnailImage(),
-                mediaList
+                mediaList,
+                blog.getAuthor().getUsername(),
+                blog.getAuthor().getPosition().name(),
+                blog.getRegDate().toLocalDate()
         );
     }
 }
