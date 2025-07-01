@@ -22,19 +22,16 @@ public record BlogResponse(
         String content,
         @Schema(description = "썸네일 이미지", example = "blogs/20250620-UUID-thumb.png")
         String thumbnailImage,
-        @Schema(
-                description = "미디어 리스트",
-                example = "[{\"s3Key\": \"blogs/20250620-UUID-content1.png\", \"mediaType\": \"IMAGE\"}, {\"s3Key\": \"blogs/20250620-UUID-content2.png\", \"mediaType\": \"IMAGE\"}]"
-        )
-        List<MediaResponse> contentMedia,
-        // 작성자 이름
+
         String MemberName,
         String position,
         @Schema(description = "작성일", example = "2025-07-01T14:30:00")
-        LocalDate createdAt
+        LocalDate createdAt,
+        @Schema(description = "블로그 요약", example = "이것은 요약이여!")
+        String summary
 
 ) {
-    public static BlogResponse from(Blog blog, List<MediaResponse> mediaList) {
+    public static BlogResponse from(Blog blog) {
         return new BlogResponse(
                 blog.getId(),
                 blog.getAuthor().getId(),
@@ -42,10 +39,10 @@ public record BlogResponse(
                 blog.getTitle(),
                 blog.getContent(),
                 blog.getThumbnailImage(),
-                mediaList,
                 blog.getAuthor().getUsername(),
                 blog.getAuthor().getPosition().name(),
-                blog.getRegDate().toLocalDate()
+                blog.getRegDate().toLocalDate(),
+                blog.getSummary()
         );
     }
 }

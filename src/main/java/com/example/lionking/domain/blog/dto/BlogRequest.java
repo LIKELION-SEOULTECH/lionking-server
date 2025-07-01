@@ -14,11 +14,6 @@ public record BlogRequest(
         @Schema(description = "본문", example = "이것은 본문이여!")
         String content,
         @Schema(description = "썸네일 이미지", example = "blogs/20250620-UUID-thumb.png")
-        String thumbnailImage,
-        @Schema(
-                description = "미디어 리스트",
-                example = "[{\"s3Key\": \"blogs/20250620-UUID-content1.png\", \"mediaType\": \"IMAGE\"}, {\"s3Key\": \"blogs/20250620-UUID-content2.png\", \"mediaType\": \"IMAGE\"}]"
-        )
-        List<MediaRequest> contentMedia
+        String thumbnailImage
 ) {
 }

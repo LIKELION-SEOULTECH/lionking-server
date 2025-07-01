@@ -8,10 +8,16 @@ spring:
     password: ${MYSQLDB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
+      defer-datasource-initialization: true
+
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true

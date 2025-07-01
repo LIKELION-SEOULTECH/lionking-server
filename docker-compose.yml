@@ -31,6 +31,8 @@ services:
         condition: service_healthy
       lionking-redis:
         condition: service_healthy
+#      lionking-summary:
+#        condition: service_healthy
 
   lionking-db:
     container_name: lionking-db
@@ -58,3 +60,14 @@ services:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 5s
       retries: 10
+
+  lionking-summary:
+    container_name: lionking-summary
+    image: geonheu/kobart-summary-homepage:1.0
+    platform: linux/arm64
+    ports:
+      - "8081:8080"
+#    healthcheck:
+#      test: [ "CMD", "curl", "--silent", "--fail", "http://lionking-summary:8080/summary" ]
+#      interval: 5s
+#      retries: 10
