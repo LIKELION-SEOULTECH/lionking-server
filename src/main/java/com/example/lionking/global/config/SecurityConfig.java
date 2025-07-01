@@ -44,7 +44,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-                .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
+                //.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
 
                 .exceptionHandling((exceptions) ->
                         exceptions
@@ -59,8 +59,8 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/swagger-resources/**",
                                 "/webjars/**").permitAll()
-                        // .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/**").permitAll()
+                        // .requestMatchers("/admin").hasRole("ADMIN")
                         // .requestMatchers("/api/v1/admin/**").hasAnyRole("REPRESENTATIVE", "MANAGER")
                         // .anyRequest().authenticated()
                 );
