@@ -24,6 +24,8 @@ import java.util.List;
 public class ProjectController {
     private final ProjectService projectService;
 
+    // ::todo:: 프로
+
     @Operation(summary = "프로젝트 등록", description = "프로젝트 등록 API")
     @PostMapping
     //@PreAuthorize("hasRole('REPRESENTATIVE') or hasRole('MANAGER')")

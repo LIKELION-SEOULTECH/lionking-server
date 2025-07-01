@@ -57,10 +57,10 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/swagger-resources/**",
                                 "/webjars/**").permitAll()
-                        .requestMatchers("/admin").hasRole("ADMIN")
+                        // .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/**").permitAll()
-                        .requestMatchers("/api/v1/admin/**").hasAnyRole("REPRESENTATIVE", "MANAGER")
-                        .anyRequest().authenticated()
+                        // .requestMatchers("/api/v1/admin/**").hasAnyRole("REPRESENTATIVE", "MANAGER")
+                        // .anyRequest().authenticated()
                 );
 
         return http.build();
