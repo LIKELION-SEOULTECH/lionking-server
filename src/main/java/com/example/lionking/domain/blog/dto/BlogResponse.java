@@ -25,7 +25,7 @@ public record BlogResponse(
 
         String MemberName,
         String position,
-        @Schema(description = "작성일", example = "2025-07-01T14:30:00")
+        @Schema(description = "작성일", example = "2025-07-01")
         LocalDate createdAt,
         @Schema(description = "블로그 요약", example = "이것은 요약이여!")
         String summary

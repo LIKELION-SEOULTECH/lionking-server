@@ -5,6 +5,7 @@ import com.example.lionking.domain.notice.entity.Notice;
 import com.example.lionking.domain.notice.entity.NoticeType;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public record NoticeResponse(
@@ -22,7 +23,9 @@ public record NoticeResponse(
                 description = "미디어 리스트",
                 example = "[{\"s3Key\": \"blogs/20250620-UUID-content1.png\", \"mediaType\": \"IMAGE\"}, {\"s3Key\": \"blogs/20250620-UUID-content2.png\", \"mediaType\": \"IMAGE\"}]"
         )
-        List<MediaResponse> contentMedia
+        List<MediaResponse> contentMedia,
+        @Schema(description = "작성일", example = "2025-07-01T14:30:00")
+        LocalDate createdAt
 ) {
     public static NoticeResponse from(Notice notice, List<MediaResponse> contentMedia) {
         return new NoticeResponse(
@@ -31,7 +34,8 @@ public record NoticeResponse(
                 notice.getNoticeType(),
                 notice.getTitle(),
                 notice.getContent(),
-                contentMedia
+                contentMedia,
+                notice.getRegDate().toLocalDate()
         );
     }
 }
