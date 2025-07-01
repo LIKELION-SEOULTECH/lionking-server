@@ -3,6 +3,7 @@ services:
     container_name: lionking-backend
     image: "choikang7157/lionking-backend:latest"
     #build: .
+    restart: always
     ports:
       - "8080:8080"
     environment:
@@ -37,6 +38,7 @@ services:
   lionking-db:
     container_name: lionking-db
     image: mysql:latest
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQLDB_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQLDB_DATABASE}
@@ -65,6 +67,7 @@ services:
     container_name: lionking-summary
     image: geonheu/kobart-summary-homepage:1.0
     platform: linux/arm64
+    restart: always
     ports:
       - "8081:8080"
 #    healthcheck:
