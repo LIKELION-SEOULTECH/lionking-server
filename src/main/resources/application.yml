@@ -20,12 +20,25 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.MySQLDialect  # MySQL8Dialect → MySQLDialect
+        dialect: org.hibernate.dialect.MySQLDialect
 
   data:
     redis:
       host: lionking-redis
       port: 6379
+
+  # 메일 설정 추가
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:your-email@gmail.com}
+    password: ${MAIL_PASSWORD:your-app-password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 logging:
   level:
@@ -48,3 +61,10 @@ cloud:
       expTime: ${CLOUD_S3_UPLOAD_EXPTIME}
     download:
       expTime: ${CLOUD_S3_DOWNLOAD_EXPTIME}
+
+# 애플리케이션 커스텀 설정 추가
+app:
+  email:
+    from: ${MAIL_FROM:noreply@yoursite.com}
+  notify:
+    start-date: ${NOTIFY_START_DATE:2026-01-01}
