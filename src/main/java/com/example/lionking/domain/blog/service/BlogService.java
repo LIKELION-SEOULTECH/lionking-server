@@ -1,4 +1,3 @@
-/*
 package com.example.lionking.domain.blog.service;
 
 
@@ -96,4 +95,4 @@ public class BlogService {
                 .orElseThrow(() -> new CustomException(GlobalErrorCode.NOT_FOUND, "존재하지 않는 블로그입니다."));
         blogRepository.delete(blog);
     }
-}*/
+}
