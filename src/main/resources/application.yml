@@ -15,7 +15,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     defer-datasource-initialization: true
     properties:
       hibernate:
@@ -27,7 +27,6 @@ spring:
       host: lionking-redis
       port: 6379
 
-  # 메일 설정 추가
   mail:
     host: smtp.gmail.com
     port: 587
@@ -62,7 +61,6 @@ cloud:
     download:
       expTime: ${CLOUD_S3_DOWNLOAD_EXPTIME}
 
-# 애플리케이션 커스텀 설정 추가
 app:
   email:
     from: ${MAIL_FROM:noreply@yoursite.com}
