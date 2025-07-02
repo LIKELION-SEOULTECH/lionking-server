@@ -36,7 +36,8 @@ public class Notice extends BaseTimeEntity {
         this.author = author;
     }
 
-    public void update(String title, String content) {
+    public void update(NoticeType noticeType, String title, String content) {
+        this.noticeType = noticeType;
         this.title = title;
         this.content = content;
     }

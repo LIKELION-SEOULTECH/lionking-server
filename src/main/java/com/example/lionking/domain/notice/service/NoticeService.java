@@ -84,7 +84,7 @@ public class NoticeService {
                                 notice.getId()))
                         .toList());
 
-        notice.update(request.title(), request.content());
+        notice.update(request.noticeType(), request.title(), request.content());
         List<MediaResponse> mediaList = mediaService.findAll(MediaOwner.NOTICE, notice.getId());
         return NoticeResponse.from(notice, mediaList);
     }
